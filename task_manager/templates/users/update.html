@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %} Редактировать пользователя {% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Редактировать пользователя {{ object.username }}</h4>
+                        <div>
+                            <form method="post">
+                                {% csrf_token %}
+                               
+                                {% if form.errors %}
+                            <div class="alert alert-danger">
+                            <strong>Исправьте ошибки:</strong>
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ field }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                            </div>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                <label class="form-label">Имя пользователя</label>
+                                <input type="text" name="username" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Имя</label>
+                                <input type="text" name="first_name" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Фамилия</label>
+                                <input type="text" name="last_name" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                            <label class="form-label">Дата регистрации</label>
+                            <input type="text" class="form-control" value="{{ object.date_joined|date:'d.m.Y H:i' }}" disabled>
+
+                            <input type="text" class="form-control" value="{{ user.date_joined }}">
+                            <a href="{% url 'users:list' %}">Назад</a>
+                            <button type="submit" class="btn btn-warning">Сохранить</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

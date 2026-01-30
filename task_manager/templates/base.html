@@ -13,7 +13,7 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="{% url 'index' %}">Task manager</a>
+      <a class="navbar-brand" href="{% url 'index' %}">Менеджер задач</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -23,7 +23,7 @@
             <a class="nav-link" href="{% url 'index' %}">Главная</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Пользователи</a>
+            <a class="nav-link" href="{% url 'users:list' %}">Пользователи</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Задачи</a>

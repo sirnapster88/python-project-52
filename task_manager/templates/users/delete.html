@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} Удалить пользователя {% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h4 class="mb-0">Удалить пользователя</h4>
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>Имя пользователя</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Полное имя</th>
+                <td>
+                    {% if user.first_name or user.last_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Дата создания</th>
+                <td>{{ user.created_at }}</td>
+            </tr>
+        </table>
+        <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'users:list' %}" class="btn btn-secondary">Отмена</a>
+            <button type="submit" class="btn btn-danger">
+                Удалить пользователя
+            </button>
+        </form>
+</div>
+
+{% endblock %}
