@@ -16,13 +16,13 @@ class UserCreateView(CreateView):
     model = User
     form_class = UserCreateForm
     template_name = 'users/create.html'
-    success_url = reverse_lazy('users:list')
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
-        messages.success(self.request,'Пользователь успешно создан!')
+        messages.success(self.request,'Пользователь успешно создан! Теперь войдите в систему.')
         return super().form_valid(form)
     
-class UserUpdateView(UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = 'users/update.html'
@@ -32,7 +32,7 @@ class UserUpdateView(UpdateView):
         messages.success(self.request,'Пользователь успешно обновлен!')
         return super().form_valid(form)
     
-class UserDeleteView(DeleteView):
+class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
@@ -40,6 +40,7 @@ class UserDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(request,'Пользователь успешно удален!')
         return super().delete(request, *args, **kwargs)
+
 
 
 

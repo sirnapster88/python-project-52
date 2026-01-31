@@ -19,15 +19,35 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarsExample05">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'index' %}">Главная</a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'users:list' %}">Пользователи</a>
           </li>
-          <li class="nav-item">
+        </ul> 
+        <ul class="navbar-nav mr-auto">
+          {% if user.is_authenticated %}
+           <li class="nav-item">
+            <a class="nav-link" href="#">Статусы</a>
+           </li>
+           <li class="nav-item">
+            <a class="nav-link" href="#">Метки</a>
+           </li>
+           <li class="nav-item">
             <a class="nav-link" href="#">Задачи</a>
+           </li>
+           <li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <input class="btn nav-link" type="submit" value="Выход">
+            </form>
+           </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Вход</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:create' %}">Регистрация</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
