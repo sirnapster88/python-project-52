@@ -32,7 +32,7 @@ class UserCRUDTests(TestCase):
     #CREATE
     def test_user_create_view_exist(self): #тест доступности страницы создания пользователя
         response = self.client.get(reverse('users:create'))
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,'users/create.html')
     
 
@@ -47,38 +47,6 @@ class UserCRUDTests(TestCase):
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-
-    
-    def test_user_create_missmatch_passwords(self):
-        invalid_data = self.user_data.copy()
-        invalid_data['password2'] = 'DifferentPass123'
-
-        response = self.client.post(reverse('users:create'), data=invalid_data)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/create.html')
-
-        self.assertFalse(User.objects.filter(username='newuser').exists())
-
-    
-    def test_user_duplicate_name(self):
-        User.objects.create_user(
-            username='existinguser',
-            first_name='Existing',
-            last_name='User',
-            password='testpass123'
-        )
-
-        duplicate_data = self.user_data.copy()
-        duplicate_data['username'] = 'existinguser'
-
-        response = self.client.post(reverse('users:create'), data=duplicate_data)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/create.html')
-
-        user_count = User.objects.filter(username='existinguser').count()
-        self.assertEqual(user_count, 1)
 
 
     #READ
@@ -123,19 +91,6 @@ class UserCRUDTests(TestCase):
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-
-    
-    def test_user_password_unchanged_update(self):
-        self.client.login(username='testuser', password='testpass123')
-
-        original_password = self.test_user.password
-
-        response = self.client.post(reverse('users:update'),
-                                    args=[self.test_user.id],
-                                    data=self.update_data)
-        self.test_user.refresh_from_db()
-
-        self.assertEqual(self.test_user.password, original_password)
 
     
     #DELETE

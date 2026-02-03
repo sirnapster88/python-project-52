@@ -1,29 +1,28 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
-{% block title %} Изменение пользователя {% endblock %}
+{% block title %} Создать статус {% endblock %}
 
 {% block content %}
-
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4>Изменение пользователя</h4>
-                        <div>
-                            <form method="post">
+                    <h4>Создать статус</h4>
+                    <div class = "card-body">
+                        <form method="post">
                             {% csrf_token %}
                             
                             {% bootstrap_form form %}
 
-                            {% bootstrap_button "Изменить" button_type="submit" %}
-                        </div>
-                    </div>  
+                            {% bootstrap_button "Создать" button_type="submit" %}
+                           
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
-
 {% endblock %}

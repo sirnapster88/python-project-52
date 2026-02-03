@@ -26,7 +26,7 @@
         <ul class="navbar-nav mr-auto">
           {% if user.is_authenticated %}
            <li class="nav-item">
-            <a class="nav-link" href="#">Статусы</a>
+            <a class="nav-link" href="{% url 'statuses:list' %}">Статусы</a>
            </li>
            <li class="nav-item">
             <a class="nav-link" href="#">Метки</a>
@@ -55,19 +55,9 @@
 
 <body>
    
-
+    
     <div class="container">
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        
+        {% bootstrap_messages %}
         {% block content %}{% endblock %}
     </div>
 
@@ -76,10 +66,10 @@
         <footer class="py-3 my-4">
             <ul class="nav justify-content-center border-bottom pb-3 mb-3">
             <li class="nav-item"><a href='{% url "index" %}' class="nav-link px-2 text-muted">Главная</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Пользователи</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Задачи</a></li>
+            <li class="nav-item"><a href="{% url 'users:list %'}" class="nav-link px-2 text-muted">Пользователи</a></li>
+            <li class="nav-item"><a href="{% url 'statuses:list' %}" class="nav-link px-2 text-muted">Статусы</a></li>
             </ul>
-            <p class="text-center text-muted">© 2026 Company, Inc</p>
+            <p class="text-center text-muted">© 2026 </p>
         </footer>
     </div>
 

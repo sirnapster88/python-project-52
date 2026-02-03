@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %} Удалить пользователя {% endblock %}
+{% block title %} Удалить статус {% endblock %}
 
 {% block content %}
 
 <div class="container mt-4">
-    <h4 class="mb-0">Удаление пользователя</h4>
+    <h4 class="mb-0">Удалить статус</h4>
+       <p>Удалить статус {{ status.name }}</p>
         <form method="post">
             {% csrf_token %}
-            <p>Вы уверены, что хотите удалить пользователя {{ user.username }}</p>
             <button type="submit" class="btn btn-danger">
                 Да, удалить
             </button>

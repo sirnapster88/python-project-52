@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
-{% block title %} Изменение пользователя {% endblock %}
+{% block title %} Изменение статуса {% endblock %}
 
 {% block content %}
 
@@ -10,14 +10,15 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4>Изменение пользователя</h4>
+                    <h4>Изменение статуса</h4>
                         <div>
                             <form method="post">
-                            {% csrf_token %}
-                            
+                                {% csrf_token %}
+
                             {% bootstrap_form form %}
 
                             {% bootstrap_button "Изменить" button_type="submit" %}
+                            
                         </div>
                     </div>  
                 </div>
