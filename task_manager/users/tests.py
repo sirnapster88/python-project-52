@@ -30,7 +30,7 @@ class UserCRUDTests(TestCase):
         }
 
     #CREATE
-    def test_user_create_view_exist(self): #тест доступности страницы создания пользователя
+    def test_uses_correct_template(self): #тест доступности страницы создания пользователя
         response = self.client.get(reverse('users:create'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,'users/create.html')
@@ -43,7 +43,7 @@ class UserCRUDTests(TestCase):
         self.assertEqual(created_user.first_name('new'))
         self.assertEqual(created_user.last_name('user'))
         self.assertEqual(created_user.username('newuser'))
-        self.assertEqual(created_user.check_password('testpass123'))
+        self.assertTrue(created_user.check_password('testpass123'))
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
