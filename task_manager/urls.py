@@ -11,5 +11,6 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', MessageLogoutView.as_view(next_page="/"), name='logout'),
     path('statuses/',include('task_manager.statuses.urls')),
+    path('tasks/', include('task_manager.tasks.urls')),
     path('', IndexView.as_view(), name='index')
 ]

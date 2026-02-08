@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %} Изменение задачи {% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Изменение задачи</h4>
+                        <div>
+                            <form method="post">
+                                {% csrf_token %}
+
+                            {% bootstrap_form form %}
+
+                            {% bootstrap_button "Изменить" button_type="submit" %}
+                            
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
