@@ -27,7 +27,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        messages.success(self.request, gettext_lazy('Task created seccessfully'))
+        messages.success(self.request, gettext_lazy('Задача успешно создана'))
         return super().form_valid(form)
     
 
@@ -38,15 +38,15 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('tasks:list')
 
 
-class TaskDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks:list')
 
-    def dispatch(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         task = self.get_object()
         if task.author != request.user:
             messages.error(request, gettext_lazy('Задачу может удалить только ее автор'))
             return redirect('tasks:list')
-        return super().dispatch(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 # Create your views here.

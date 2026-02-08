@@ -22,6 +22,10 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
 
     login_url = reverse_lazy('login')
 
+    def form_valid(self, form):
+        messages.success(self.request, gettext('Статус успешно создан.'))
+        return super().form_valid(form)
+
     
 class StatusUpdateView(LoginRequiredMixin, UpdateView):
     model = Status

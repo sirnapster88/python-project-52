@@ -28,6 +28,8 @@ class Task(models.Model):
         verbose_name='Испольнитель'   
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    labels = models.ManyToManyField('labels.Label',
+                                    verbose_name=gettext_lazy('Метки'))
     
     def __str__(self):
         return self.name
