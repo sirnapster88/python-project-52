@@ -1,17 +1,51 @@
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.utils.translation import gettext_lazy
 
 from .models import Task
-from .forms import TaskForm
+from .forms import TaskForm, TaskFilterForm
 
 class TaskListView(LoginRequiredMixin, ListView):
     model = Task
-    template_name = 'tasks/list.html'
+    template_name = 'base/list.html'
     context_object_name = 'tasks'
+
+    def get_queryset(self):
+        query_set = super().get_queryset()
+        
+        status = self.request.GET.get('status')
+        executor = self.request.GET.get('executor')
+        label = self.request.GET.get('label')
+        my_task = self.request.GET.get('my_task')
+
+        if status:
+            query_set = query_set.filter(status_id=status)
+        if executor:
+            query_set = query_set.filter(executor_id=executor)
+        if label:
+            query_set = query_set.filter(labels__id=label).distinct()
+        if my_task:
+            query_set = query_set.filter(author=self.request.user)
+        return query_set
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        filter_form = TaskFilterForm(self.request.GET or None)
+        context.update({
+            'title': 'Задачи',
+            'create_url': 'tasks:create',
+            'create_button': 'Создать задачу',
+            'table_headers': ['ID','Имя','Статус','Автор','Исполнитель','Дата создания',''],
+            'list_template': 'Задачи',
+            'row_template': 'tasks/table_row.html',
+            'filter_form': filter_form,
+            'has_filter': bool(self.request.GET),       
+            })
+        return context
+
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
@@ -22,8 +56,14 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
 class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
     form_class = TaskForm
-    template_name = 'tasks/create.html'
+    template_name = 'base/form.html'
     success_url = reverse_lazy('tasks:list')
+    extra_context = {
+        'title': 'Создать задачу',
+        'form_title': 'Создать задачу',
+        'submit_button': 'Создать'       
+    }
+
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -34,14 +74,25 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     form_class = TaskForm
-    template_name = 'tasks/create.html'
+    template_name = 'base/form.html'
     success_url = reverse_lazy('tasks:list')
+    extra_context = {
+        'title': 'Изменение задачи',
+        'form_title': 'Изменение статуса',
+        'submit_button': 'Изменить'
+    }
 
 
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
-    template_name = 'tasks/delete.html'
+    template_name = 'base/delete.html'
     success_url = reverse_lazy('tasks:list')
+    extra_context = {
+        'title': 'Удаление задачи',
+        'delete_title': 'Удаление задачи',
+        'delete_message': f'Вы уверены, что хотите удалить задачу',
+        'submit_button': 'Да, удалить',
+    }
 
     def post(self, request, *args, **kwargs):
         task = self.get_object()
@@ -49,4 +100,6 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
             messages.error(request, gettext_lazy('Задачу может удалить только ее автор'))
             return redirect('tasks:list')
         return super().post(request, *args, **kwargs)
+    
+
 # Create your views here.

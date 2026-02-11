@@ -8,15 +8,26 @@ from .forms import UserCreateForm, UserUpdateForm
 
 class UserListView(ListView):
     model = User
-    template_name = 'users/list.html'
+    template_name = 'base/list.html'
     context_object_name = 'users'
     ordering = ['id']
+    extra_context = {
+        'title':'Пользователи',
+        'table_headers': ['ID','Имя пользователя','Полное имя','Дата создания',''],
+        'list_title': 'Пользователи',
+        'row_template': 'users/table_row.html'
+    }
 
 class UserCreateView(CreateView):
     model = User
     form_class = UserCreateForm
-    template_name = 'users/create.html'
+    template_name = 'base/form.html'
     success_url = reverse_lazy('login')
+    extra_context = {
+        'title': 'Регистрация',
+        'form_title': 'Регистрация',
+        'submit_button': 'Зарегистрировать'
+    } 
 
     def form_valid(self, form):
         messages.success(self.request,'Пользователь успешно создан! Теперь войдите в систему.')
@@ -25,8 +36,13 @@ class UserCreateView(CreateView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
-    template_name = 'users/update.html'
+    template_name = 'base/form.html'
     success_url = reverse_lazy('users:list')
+    extra_context = {
+        'title': 'Изменение пользователя',
+        'form_title': 'Изменение пользователя',
+        'submit_button': 'Изменить'
+    }
 
     def form_valid(self, form):
         messages.success(self.request,'Пользователь успешно обновлен!')
@@ -34,8 +50,18 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
-    template_name = 'users/delete.html'
+    template_name = 'base/delete.html'
     success_url = reverse_lazy('users:list')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context.update({
+        'title': 'Удаление пользователя',
+        'delete_title': 'Удаление пользователя',
+        'delete_message': f'Вы уверены, что хотите удалить {self.object.username}?',
+        'submit_button': 'Да, удалить'
+        })
+        return context
 
     def delete(self, request, *args, **kwargs):
         messages.success(request,'Пользователь успешно удален!')

@@ -1,0 +1,15 @@
+{% for label in labels %}
+    <tr>
+        <td>{{ label.id }}</td>
+        <td>{{ label.name }}</td>
+        <td>{{ label.created_at|date:"d.m.y H:i" }}</td>
+        <td>
+            <a href="{% url 'labels:update' label.id %}" class="btn btn-sm btn-warning">
+            <i class="bi bi-pencil"></i> Изменить
+        </a>
+        <a href="{% url 'labels:delete' label.id %}" class="btn btn-sm btn-danger">
+            <i class="bi bi-trash"></i> Удалить
+        </a>
+        </td>
+    </tr>
+{% endfor %}

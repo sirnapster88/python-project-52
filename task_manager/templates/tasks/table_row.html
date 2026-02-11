@@ -1,0 +1,18 @@
+{% for task in tasks %}
+    <tr>
+        <td>{{ task.id }}</td>
+        <td><a href="{% url 'tasks:detail_view' task.id %}"> {{ task.name }} </a></td>
+        <td>{{ task.status.name }}</td>
+        <td>{{ task.author.username }}</td>
+        <th>{{ task.executor.username|default:"Не назначен" }}</th>
+        <td>{{ task.created_at|date:"d.m.y H:i" }}</td>
+        <td>
+            <a href="{% url 'tasks:update' task.id %}" class="btn btn-sm btn-warning">
+            <i class="bi bi-pencil"></i> Изменить
+        </a>
+        <a href="{% url 'tasks:delete' task.id %}" class="btn btn-sm btn-danger">
+            <i class="bi bi-trash"></i> Удалить
+        </a>
+        </td>
+    </tr>
+{% endfor %}

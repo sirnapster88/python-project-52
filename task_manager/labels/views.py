@@ -13,14 +13,27 @@ from task_manager.tasks.models import Task
 
 class LabelListView(LoginRequiredMixin, ListView):
     model = Label
-    template_name = 'labels/list.html'
+    template_name = 'base/list.html'
     context_object_name = 'labels'
+    extra_context = {
+        'title':'Метки',
+        'create_url': 'labels:create',
+        'create_button': 'Создать метку',
+        'table_headers': ['ID','Имя','Дата создания'],
+        'list_title': 'Метки',
+        'row_template': 'labels/table_row.html'
+    }
 
 class LabelCreateView(LoginRequiredMixin, CreateView):
     model = Label
     form_class = LabelForm
-    template_name = 'labels/create.html'
-    success_url = reverse_lazy('label:list')
+    template_name = 'base/form.html'
+    success_url = reverse_lazy('labels:list')
+    extra_context = {
+        'title': 'Создать метку',
+        'form_title': 'Создать метку',
+        'submit_button': 'Создать'        
+    }
 
     def form_valid(self, form):
         messages.success(self.request, gettext_lazy('Метка успешно создана'))
@@ -29,14 +42,30 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
 class LabelUpdateView(LoginRequiredMixin, UpdateView):
     model = Label
     form_class = LabelForm
-    template_name = 'labels/create.html'
+    template_name = 'base/form.html'
     success_url = reverse_lazy('labels:list')
+
+    extra_context = {
+        'title': 'Изменение метки',
+        'form_title': 'Изменение метки',
+        'submit_button': 'Изменить'
+    }
 
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
     
     model = Label
-    template_name = 'labels/delete.html'
+    template_name = 'base/delete.html'
     success_url = reverse_lazy('labels:list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'title': 'Удаление метки',
+            'delete_title': 'Удаление статуса',
+            'delete_message': f'Вы уверены, что хотите удалить метку?',
+            'submit_button': 'Да, удалить',
+        })
+        return 
 
     def post(self, request, *args, **kwargs):
         label = self.get_object()

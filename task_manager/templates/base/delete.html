@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %} Удалить статус {% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
 {% block content %}
 
 <div class="container mt-4">
-    <h4 class="mb-0">Удалить статус</h4>
-       <p>Удалить статус {{ status.name }}</p>
+    <h4 class="mb-0">{{ delete_title }}</h4>
+       <p>{{ delete_message }}</p>
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">
-                Да, удалить
+                {{ submit_button }}
             </button>
         </form>
 </div>
+
+
 
 {% endblock %}

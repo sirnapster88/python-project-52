@@ -1,0 +1,26 @@
+{% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td><strong>{{ user.username }}</strong></td>
+        <td>
+            {% if user.first_name or user.last_name %}
+                {{ user.first_name }} {{ user.last_name }}
+            {% else %}
+                <span class="text-muted">—</span>
+            {% endif %}
+        </td>
+        <td>{{ user.date_joined|date:"d.m.Y H:i" }}</td>
+        <td>
+            <a href="/users/{{ user.id }}/update/" class="btn btn-sm btn-warning">
+                <i class="bi bi-pencil"></i> Изменить
+            </a>
+            <a href="/users/{{ user.id }}/delete/" class="btn btn-sm btn-danger">
+                <i class="bi bi-trash"></i> Удалить
+            </a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5" class="text-center">Пользователей нет</td>
+    </tr>
+{% endfor %}

@@ -1,0 +1,15 @@
+{% for status in object_list %}
+    <tr>
+        <td>{{ status.id }}</td>
+        <td>{{ status.name }}</td>
+        <td>{{ status.created_at|date:"d.m.y H:i" }}</td>
+        <td>
+            <a href="{% url 'statuses:update' status.id %}" class="btn btn-sm btn-warning">
+            <i class="bi bi-pencil"></i> Изменить
+        </a>
+        <a href="{% url 'statuses:delete' status.id %}" class="btn btn-sm btn-danger">
+            <i class="bi bi-trash"></i> Удалить
+        </a>
+        </td>
+    </tr>
+{% endfor %}
