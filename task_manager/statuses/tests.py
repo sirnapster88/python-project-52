@@ -29,7 +29,7 @@ class StatusCRUDViewTests(TestCase):
     def test_status_create_view_exist_authenticated(self):
         response = self.client.get(reverse('statuses:create'))
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response, 'statuses/create.html')
+        self.assertTemplateUsed(response, 'base/form.html')
     
     def test_status_create_success(self):
         data = {'name': 'test status'}
@@ -45,7 +45,7 @@ class StatusCRUDViewTests(TestCase):
     def test_status_list_view_authetnicated(self):
         response = self.client.get(reverse('statuses:list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'statuses/list.html')
+        self.assertTemplateUsed(response, 'base/list.html')
 
     def test_status_list_view_unauthenticated(self):
         self.client.logout()
@@ -58,7 +58,7 @@ class StatusCRUDViewTests(TestCase):
     def test_status_update_view_authenticated(self):
         response = self.client.get(reverse('statuses:update', args=[self.status1.pk]))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'statuses/update.html')
+        self.assertTemplateUsed(response, 'base/update.html')
         self.assertEqual(response.content['object'], self.status1)
 
     def test_status_update_successfuly(self):

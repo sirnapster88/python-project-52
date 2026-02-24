@@ -39,7 +39,7 @@ class TaskListView(LoginRequiredMixin, ListView):
             'create_url': 'tasks:create',
             'create_button': 'Создать задачу',
             'table_headers': ['ID','Имя','Статус','Автор','Исполнитель','Дата создания',''],
-            'list_template': 'Задачи',
+            'list_title': 'Задачи',
             'row_template': 'tasks/table_row.html',
             'filter_form': filter_form,
             'has_filter': bool(self.request.GET),       
@@ -78,7 +78,7 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('tasks:list')
     extra_context = {
         'title': 'Изменение задачи',
-        'form_title': 'Изменение статуса',
+        'form_title': 'Изменение задачи',
         'submit_button': 'Изменить'
     }
 

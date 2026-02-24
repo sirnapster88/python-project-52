@@ -33,7 +33,7 @@ class UserCRUDTests(TestCase):
     def test_uses_correct_template(self): #тест доступности страницы создания пользователя
         response = self.client.get(reverse('users:create'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,'users/create.html')
+        self.assertTemplateUsed(response,'base/create.html')
     
 
     def test_user_create_success(self):
@@ -53,11 +53,11 @@ class UserCRUDTests(TestCase):
     def test_user_list_view(self):
         response = self.client.get(reverse('users:list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/list.html')
+        self.assertTemplateUsed(response, 'base/list.html')
 
         self.assertIn('users', response.content)
 
-        users = response.content['users']
+        users = response.context['users']
         self.assertIn(self.test_user, users)
 
     

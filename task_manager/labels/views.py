@@ -54,6 +54,7 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
     
     model = Label
+    form = LabelForm
     template_name = 'base/delete.html'
     success_url = reverse_lazy('labels:list')
 
@@ -61,11 +62,11 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context.update({
             'title': 'Удаление метки',
-            'delete_title': 'Удаление статуса',
+            'delete_title': 'Удаление метки',
             'delete_message': f'Вы уверены, что хотите удалить метку?',
             'submit_button': 'Да, удалить',
         })
-        return 
+        return context
 
     def post(self, request, *args, **kwargs):
         label = self.get_object()
