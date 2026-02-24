@@ -13,7 +13,7 @@ collectstatic:
 start:
 	uv run python manage.py runserver
 
-render-start:
+render-start: 
 	uv run python manage.py migrate
 	gunicorn task_manager.wsgi
 	
