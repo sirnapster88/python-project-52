@@ -14,6 +14,8 @@ start:
 	uv run python manage.py runserver
 
 render-start:
-	gunicorn task_manager.wsgi
+	uvsync
 	uv pip install -r requirements.txt
 	uv run python manage.py migrate
+	gunicorn task_manager.wsgi
+	
