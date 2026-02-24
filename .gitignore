@@ -5,3 +5,4 @@ main.py
 .ruff_cache
 .python-version
 *.sqlite3
+db.sqlite3
