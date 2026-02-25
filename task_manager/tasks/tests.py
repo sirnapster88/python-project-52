@@ -10,19 +10,19 @@ from task_manager.labels.models import Label
 
 class TaskCRUDTests(TestCase):
     def setUp(self):
-        self.client = Client
+        self.client = Client()
 
-        self.author = User.objects.create(
+        self.author = User.objects.create_user(
             username='author',
             password='author123'
         )
 
-        self.executor = User.objects.create(
+        self.executor = User.objects.create_user(
             username='executor',
             password='executor123'
         )
 
-        self.other_user = User.objects.create(
+        self.other_user = User.objects.create_user(
             username='otheruser',
             password='otheruser123'
         )
@@ -49,9 +49,9 @@ class TaskCRUDTests(TestCase):
         response = self.client.get(reverse('tasks:create'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'base/create.html')
+        self.assertTemplateUsed(response, 'base/form.html')
         self.assertEqual(response.context['title'], 'Создать задачу')
-        self.assertEqual(response.context['form_title'], 'Создать зачаду')
+        self.assertEqual(response.context['form_title'], 'Создать задачу')
         self.assertEqual(response.context['submit_button'], 'Создать')
 
     def test_task_create_view_unauthenticated(self):
@@ -61,17 +61,17 @@ class TaskCRUDTests(TestCase):
 
     def test_task_create_success(self):
         data = {
-            'name': 'Тестовая задача',
+            'name': 'Новая Тестовая задача',
             'description': 'Описание тестовой задачи',
             'status': self.status.pk,
             'executor': self.executor.pk,
             'labels': [self.label1.pk, self.label2.pk]
         }        
 
-        response = self.client.post(reverse('tasks:crete', data))
+        response = self.client.post(reverse('tasks:create'), data)
 
         self.assertRedirects(response, reverse('tasks:list'))
-        task = Task.objects.get(name='Тестовая задача')
+        task = Task.objects.get(name='Новая Тестовая задача')
         self.assertEqual(task.description, 'Описание тестовой задачи')
         self.assertEqual(task.author, self.author)
         self.assertEqual(task.executor, self.executor)
@@ -87,7 +87,7 @@ class TaskCRUDTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/list.html')
         self.assertEqual(response.context['title'], 'Задачи')
-        self.assertIn('filter_form', response.content)
+        self.assertIn('filter_form', response.context)
         self.assertIsInstance(response.context['filter_form'], TaskFilterForm)
 
     def test_tasks_filter_by_status(self):
@@ -141,14 +141,14 @@ class TaskCRUDTests(TestCase):
     
     #DETAIL
     def test_tasks_detail_view_authenticated(self):
-        response = self.client.get(reverse('task:detail_view', args=[self.task.pk]))
+        response = self.client.get(reverse('tasks:detail_view', args=[self.task.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'task/detail_view.html')
         self.assertEqual(response.context['task'], self.task)
 
     #UPDATE
     def test_task_update_view_authenticated(self):
-        response = self.client.get(reverse('task:update', args=[self.task.pk]))
+        response = self.client.get(reverse('tasks:update', args=[self.task.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/form.html')
         self.assertEqual(response.context['title'], 'Изменение задачи')
@@ -164,7 +164,7 @@ class TaskCRUDTests(TestCase):
             'labels': [self.label2.pk]
         }
         response = self.client.post(reverse('tasks:update', args=[self.task.pk]), data)
-        self.assertRedirects(reverse('tasks:list'))
+        self.assertRedirects(response, reverse('tasks:list'))
         self.task.refresh_from_db()
 
         self.assertEqual(self.task.name, 'Обновленная задача')
@@ -179,7 +179,7 @@ class TaskCRUDTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/delete.html')
         self.assertEqual(response.context['title'], 'Удаление задачи')
-        self.assertEqual(response.context['form_title'], 'Удаление задачи')
+        self.assertEqual(response.context['delete_title'], 'Удаление задачи')
         self.assertEqual(response.context['submit_button'], 'Да, удалить')
 
     def test_task_delete_by_author_success(self):
@@ -190,11 +190,11 @@ class TaskCRUDTests(TestCase):
     
     def test_task_delete_by_non_author(self):
         self.client.logout()
-        self.client.login(usernane='otheruser', password='otheruser123')
+        self.client.login(username='otheruser', password='otheruser123')
 
         response = self.client.post(reverse('tasks:delete', args=[self.task.pk]))
 
-        self.assertRedirects(reverse('tasks:list'))
+        self.assertRedirects(response, reverse('tasks:list'))
         self.assertTrue(Task.objects.filter(pk=self.task.pk).exists())
 
         messages = list(get_messages(response.wsgi_request))

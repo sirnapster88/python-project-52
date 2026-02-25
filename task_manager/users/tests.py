@@ -26,7 +26,8 @@ class UserCRUDTests(TestCase):
         self.update_data = {
             'username': 'updateuser',
             'first_name': 'update',
-            'last_name': 'user'
+            'last_name': 'user',
+            'password': 'testpass123'
         }
 
     #CREATE
@@ -40,9 +41,9 @@ class UserCRUDTests(TestCase):
         response = self.client.post(reverse('users:create'),data=self.user_data)
         self.assertRedirects(response, reverse('login'))
         created_user = User.objects.get(username='newuser')
-        self.assertEqual(created_user.first_name('new'))
-        self.assertEqual(created_user.last_name('user'))
-        self.assertEqual(created_user.username('newuser'))
+        self.assertEqual(created_user.first_name, 'new')
+        self.assertEqual(created_user.last_name, 'user')
+        self.assertEqual(created_user.username, 'newuser')
         self.assertTrue(created_user.check_password('testpass123'))
 
         messages = list(get_messages(response.wsgi_request))
@@ -55,7 +56,7 @@ class UserCRUDTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/list.html')
 
-        self.assertIn('users', response.content)
+        self.assertIn('users', response.context)
 
         users = response.context['users']
         self.assertIn(self.test_user, users)
@@ -70,10 +71,10 @@ class UserCRUDTests(TestCase):
 
     
     #UPDATE
-    def test_user_update_view_requires_login(self):
+    def test_user_update_view_requiers_login(self):
         response = self.client.get(reverse('users:update', args=[self.test_user.id]))
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.url.starts_with('/login'))
+        self.assertTrue(response.url.startswith('/login'))
         
     
     def test_user_update_success(self):
@@ -97,7 +98,7 @@ class UserCRUDTests(TestCase):
     def test_user_delete_view_requiers_login(self):
         response = self.client.get(reverse('users:delete', args=[self.test_user.id]))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url.starts_with('/login'))
+        self.assertEqual(response.url.startswith('/login'), True)
 
     
     def test_user_delete_success(self):

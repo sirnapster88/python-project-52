@@ -53,6 +53,10 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
         'submit_button': 'Изменить'
     }
     
+    def form_valid(self, form):
+        messages.success(self.request, gettext('Статус успешно изменён.'))
+        return super().form_valid(form)
+    
 class StatusDeleteView(LoginRequiredMixin, DeleteView):
     model = Status
     form = StatusForm

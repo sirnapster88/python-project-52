@@ -11,7 +11,7 @@ class StatusCRUDViewTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-        self.test_user = User.objects.create(
+        self.test_user = User.objects.create_user(
             username = 'testuser',
             first_name = 'test',
             last_name = 'user',
@@ -37,7 +37,7 @@ class StatusCRUDViewTests(TestCase):
         response = self.client.post(reverse('statuses:create'), data)
         self.assertRedirects(response, reverse('statuses:list'))
 
-        self.assertTrue(Status.objects.filter('тестовый статус'.exists()))
+        self.assertTrue(Status.objects.filter(name='test status').exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
     
@@ -52,26 +52,28 @@ class StatusCRUDViewTests(TestCase):
         response = self.client.get(reverse('statuses:list'))
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, f'/login/?next={reverse('statuses:list')}')
+        self.assertRedirects(response, f'/login/?next={reverse("statuses:list")}')
 
     #UPDATE
     def test_status_update_view_authenticated(self):
         response = self.client.get(reverse('statuses:update', args=[self.status1.pk]))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'base/update.html')
-        self.assertEqual(response.content['object'], self.status1)
+        self.assertTemplateUsed(response, 'base/form.html')
+        self.assertEqual(response.context['object'], self.status1)
 
-    def test_status_update_successfuly(self):
+    def test_status_update_successful(self):
         data = {'name': 'updated status'}
         response = self.client.post(reverse('statuses:update', args=[self.status1.pk]), data)
         self.assertRedirects(response, reverse('statuses:list'))
         self.status1.refresh_from_db()
 
         self.assertEqual(self.status1.name, 'updated status')
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
 
     #DELETE
     def test_status_delete_sucessfully(self):
-        response = self.client.post(reverse('statuses:delete'), args=[self.status1.pk])
+        response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))
 
         self.assertRedirects(response, reverse('statuses:list'))
         self.assertFalse(Status.objects.filter(pk=self.status1.pk).exists())

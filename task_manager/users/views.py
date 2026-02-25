@@ -63,12 +63,8 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
         })
         return context
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         messages.success(request,'Пользователь успешно удален!')
         return super().delete(request, *args, **kwargs)
-
-
-
-
 
 # Create your views here.
