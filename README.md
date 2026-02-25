@@ -3,3 +3,6 @@
 
 ### SonarCube tests status:
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sirnapster88_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sirnapster88_python-project-52)
+
+### SonarCube coverage test:
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sirnapster88_python-project-52&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sirnapster88_python-project-52)
