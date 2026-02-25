@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 
 from .models import Label
-from .forms import LabelForm
 from task_manager.tasks.models import Task
 from task_manager.statuses.models import Status
 

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 
 from .models import Task
-from .forms import TaskForm, TaskFilterForm
+from .forms import TaskFilterForm
 from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
 
@@ -92,7 +92,7 @@ class TaskCRUDTests(TestCase):
 
     def test_tasks_filter_by_status(self):
         new_status = Status.objects.create(name='Новый статус')
-        task2 = Task.objects.create(
+        Task.objects.create(
             name='Задача 2',
             status=new_status,
             author=self.author
@@ -143,7 +143,7 @@ class TaskCRUDTests(TestCase):
     def test_tasks_detail_view_authenticated(self):
         response = self.client.get(reverse('tasks:detail_view', args=[self.task.pk]))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'task/detail_view.html')
+        self.assertTemplateUsed(response, 'tasks/detail_view.html')
         self.assertEqual(response.context['task'], self.task)
 
     #UPDATE

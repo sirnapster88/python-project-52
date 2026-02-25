@@ -27,14 +27,15 @@ class UserCRUDTests(TestCase):
             'username': 'updateuser',
             'first_name': 'update',
             'last_name': 'user',
-            'password': 'testpass123'
+            'password1': 'testpass123',
+            'password2': 'testpass123'
         }
 
     #CREATE
-    def test_uses_correct_template(self): #тест доступности страницы создания пользователя
+    def test_uses_correct_template(self): 
         response = self.client.get(reverse('users:create'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,'base/create.html')
+        self.assertTemplateUsed(response,'base/form.html')
     
 
     def test_user_create_success(self):

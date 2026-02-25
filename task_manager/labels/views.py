@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -63,7 +62,7 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
         context.update({
             'title': 'Удаление метки',
             'delete_title': 'Удаление метки',
-            'delete_message': f'Вы уверены, что хотите удалить метку?',
+            'delete_message': 'Вы уверены, что хотите удалить метку?',
             'submit_button': 'Да, удалить',
         })
         return context

@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -90,7 +90,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
     extra_context = {
         'title': 'Удаление задачи',
         'delete_title': 'Удаление задачи',
-        'delete_message': f'Вы уверены, что хотите удалить задачу',
+        'delete_message': 'Вы уверены, что хотите удалить задачу',
         'submit_button': 'Да, удалить',
     }
 

@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 
 from .models import Status
-from .forms import StatusForm 
 
 
 class StatusCRUDViewTests(TestCase):
