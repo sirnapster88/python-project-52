@@ -104,7 +104,7 @@ class TaskCRUDTests(TestCase):
 
     
     def test_tasks_filter_by_executor(self):
-        task2 = Task.objects.create(
+        Task.objects.create(
             name='Задача 2',
             status=self.status,
             author=self.author,
@@ -129,7 +129,7 @@ class TaskCRUDTests(TestCase):
         self.assertNotContains(response, 'Тестовая задача')
     
     def test_tasks_filter_by_my_tasks(self):
-        task2 = Task.objects.create(
+        Task.objects.create(
             name='Задача другого пользователя',
             status=self.status,
             author=self.other_user
