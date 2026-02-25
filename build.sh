@@ -3,4 +3,4 @@ source $HOME/.local/bin/env
 
 uv pip install -r requirements.txt
 
-make install && make collectstatic && make migrate
+make create-venv && make activate-venv && make install && make collectstatic && make migrate
