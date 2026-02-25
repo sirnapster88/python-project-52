@@ -30,7 +30,7 @@ class UserCreateView(CreateView):
     } 
 
     def form_valid(self, form):
-        messages.success(self.request,'Пользователь успешно создан! Теперь войдите в систему.')
+        messages.success(self.request,'Пользователь успешно зарегистрирован')
         return super().form_valid(form)
     
 class UserUpdateView(LoginRequiredMixin, UpdateView):
