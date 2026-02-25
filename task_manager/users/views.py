@@ -44,7 +44,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     }
 
     def form_valid(self, form):
-        messages.success(self.request,'Пользователь успешно обновлен!')
+        messages.success(self.request,'Пользователь успешно изменен')
         return super().form_valid(form)
     
 class UserDeleteView(LoginRequiredMixin, DeleteView):

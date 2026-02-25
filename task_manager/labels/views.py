@@ -50,6 +50,9 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
         'submit_button': 'Изменить'
     }
 
+    def form_valid(self, form):
+        messages.success(self.request,gettext_lazy('Метка успешно изменена'))
+        return super().form_valid(form)
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
     
     model = Label
