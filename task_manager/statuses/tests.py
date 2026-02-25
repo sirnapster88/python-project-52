@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 
 from .models import Status
+from task_manager.tasks.models import Task
 
 
 class StatusCRUDViewTests(TestCase):
@@ -20,7 +21,6 @@ class StatusCRUDViewTests(TestCase):
         self.status1 = Status.objects.create(name='статус1')
         self.status2 = Status.objects.create(name='статус2')
 
-        self.client = Client()
         self.client.login(username='testuser', password='testpass123')
     
     
@@ -76,4 +76,19 @@ class StatusCRUDViewTests(TestCase):
 
         self.assertRedirects(response, reverse('statuses:list'))
         self.assertFalse(Status.objects.filter(pk=self.status1.pk).exists())
+
+    def test_status_delete_protected_by_task(self):
+        Task.objects.create(
+            name='Test Task',
+            status=self.status1,
+            author=self.test_user
+        )
+        
+        response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))
+        
+        self.assertRedirects(response, reverse('statuses:list'))
+        self.assertTrue(Status.objects.filter(pk=self.status1.pk).exists())
+        
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
 # Create your tests here.

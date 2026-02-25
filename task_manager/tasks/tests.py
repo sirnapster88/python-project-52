@@ -57,7 +57,7 @@ class TaskCRUDTests(TestCase):
     def test_task_create_view_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse('tasks:create'))
-        self.assertRedirects(response, f'/login/?next={reverse('tasks:create')}')
+        self.assertRedirects(response, f'/login/?next={reverse("tasks:create")}')
 
     def test_task_create_success(self):
         data = {
