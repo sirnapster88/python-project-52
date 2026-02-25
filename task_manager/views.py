@@ -1,16 +1,22 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
 
 
 class IndexView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html') 
-    
+
+class MessageLoginView(SuccessMessageMixin, LoginView):
+    template_name = 'registration/login.html'
+    next_page = reverse_lazy('index')
+    success_message = 'Вы залогинены' 
 
 class MessageLogoutView(LogoutView):
-    def dispatch(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         messages.success(request, 'Вы разлогинены')
-        return super().dispatch(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
