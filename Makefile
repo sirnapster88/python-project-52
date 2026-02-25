@@ -10,6 +10,9 @@ create-venv:
 activate-venv:
 	source .venv/bin/activate
 
+test:
+	uv run python manage.py test
+
 migrate:
 	uv run python manage.py migrate
 
