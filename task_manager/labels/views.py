@@ -53,6 +53,7 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request,gettext_lazy('Метка успешно изменена'))
         return super().form_valid(form)
+    
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
     
     model = Label
@@ -70,6 +71,10 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
         })
         return context
 
+    def form_valid(self, form):
+        messages.success(self.request,gettext_lazy('Метка успешно удалена'))
+        return super().form_valid(form)
+    
     def post(self, request, *args, **kwargs):
         label = self.get_object()
         if Task.objects.filter(labels=label).exists():
