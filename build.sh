@@ -1,6 +1,10 @@
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source $HOME/.local/bin/env
 
+uv venv
+
+source .venv/bin/activate
+
 uv pip install -r requirements.txt
 
-make create-venv && make activate-venv && make install && make collectstatic && make migrate
+make install && make collectstatic && make migrate

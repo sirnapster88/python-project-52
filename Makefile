@@ -8,7 +8,7 @@ create-venv:
 	uv venv
 
 activate-venv:
-	uv .venv/bin/activate
+	source .venv/bin/activate
 
 migrate:
 	uv run python manage.py migrate
