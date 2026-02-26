@@ -10,12 +10,12 @@ User = get_user_model()
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['name', 'description', 'status', 'executor','labels']
+        fields = ['name', 'description', 'status', 'executor', 'labels']
         labels = {
             'name': gettext_lazy('Имя'),
             'description': gettext_lazy('Описание'),
             'status': gettext_lazy('Статус'),
             'executor': gettext_lazy('Исполнитель'),
-            'labels':gettext_lazy('Метки')
+            'labels': gettext_lazy('Метки')
         }
 

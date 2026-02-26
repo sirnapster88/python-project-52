@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import LabelCreateView, LabelDeleteView, LabelListView, LabelUpdateView
+from .views import LabelCreateView, LabelDeleteView, LabelListView, LabelUpdateView  # noqa: E501
 
 app_name = 'labels'
 

@@ -6,6 +6,7 @@ from task_manager.statuses.models import Status
 
 User = get_user_model()
 
+
 class Task(models.Model):
     name = models.CharField(max_length=150, verbose_name='Имя')
     description = models.TextField(verbose_name="Описание")

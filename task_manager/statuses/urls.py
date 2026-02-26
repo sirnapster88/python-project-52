@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import StatusCreateView, StatusDeleteView, StatusListView, StatusUpdateView
+from .views import StatusCreateView, StatusDeleteView, StatusListView, StatusUpdateView  # noqa: E501
 
 app_name = 'statuses'
 

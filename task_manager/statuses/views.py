@@ -18,7 +18,7 @@ class StatusListView(LoginRequiredMixin, ListView):
             'title': 'Статусы',
             'create_url': 'statuses:create',
             'create_button': 'Создать статус',
-            'table_headers': ['ID','Имя','Дата создания',''],
+            'table_headers': ['ID', 'Имя', 'Дата создания', ''],
             'list_title': 'Статусы',
             'row_template': 'statuses/table_row.html'
         }
@@ -59,6 +59,7 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, gettext('Статус успешно изменен'))
         return super().form_valid(form)
 
+
 class StatusDeleteView(LoginRequiredMixin, DeleteView):
     model = Status
     form = StatusForm
@@ -72,7 +73,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
         context.update({
             'title': 'Удаление статуса',
             'delete_title': 'Удаление статуса',
-            'delete_message': f'Вы уверены, что хотите удалить "{self.object.name}"?',
+            'delete_message': f'Вы уверены, что хотите удалить "{self.object.name}"?',  # noqa: E501
             'submit_button': 'Да, удалить',
         })
         return context
@@ -80,7 +81,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         try:
             response = super().post(request, *args, **kwargs)
-            messages.success(request,gettext('Статус успешно удален'))
+            messages.success(request, gettext('Статус успешно удален'))
             return response
         except ProtectedError:
             messages.error(request, gettext('Невозможно удалить статус, потому что он используется'))  # noqa: E501

@@ -16,13 +16,14 @@ class LabelListView(LoginRequiredMixin, ListView):
     template_name = 'base/list.html'
     context_object_name = 'labels'
     extra_context = {
-        'title':'Метки',
+        'title': 'Метки',
         'create_url': 'labels:create',
         'create_button': 'Создать метку',
-        'table_headers': ['ID','Имя','Дата создания'],
+        'table_headers': ['ID', 'Имя', 'Дата создания'],
         'list_title': 'Метки',
         'row_template': 'labels/table_row.html'
     }
+
 
 class LabelCreateView(LoginRequiredMixin, CreateView):
     model = Label
@@ -39,6 +40,7 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, gettext_lazy('Метка успешно создана'))
         return super().form_valid(form)
 
+
 class LabelUpdateView(LoginRequiredMixin, UpdateView):
     model = Label
     form_class = LabelForm
@@ -52,8 +54,9 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
     }
 
     def form_valid(self, form):
-        messages.success(self.request,gettext_lazy('Метка успешно изменена'))
+        messages.success(self.request, gettext_lazy('Метка успешно изменена'))
         return super().form_valid(form)
+
 
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
 
@@ -73,17 +76,14 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
         return context
 
     def form_valid(self, form):
-        messages.success(self.request,gettext_lazy('Метка успешно удалена'))
+        messages.success(self.request, gettext_lazy('Метка успешно удалена'))
         return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
         label = self.get_object()
         if Task.objects.filter(labels=label).exists():
-            messages.error(request, gettext_lazy('Невозможно удалить метку, она используется')) # noqa: E501
+            messages.error(request, gettext_lazy('Невозможно удалить метку, она используется'))  # noqa: E501
             return redirect('labels:list')
 
         return super().post(request, *args, **kwargs)
-
-
-
 # Create your views here.

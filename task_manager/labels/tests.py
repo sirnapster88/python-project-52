@@ -35,7 +35,7 @@ class LabelCRUDTests(TestCase):
     def test_label_create_view_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse('labels:create'))
-        self.assertRedirects(response, f'/login/?next={reverse("labels:create")}') # noqa: E501
+        self.assertRedirects(response, f'/login/?next={reverse("labels:create")}')  # noqa: E501
 
     def test_create_label_success(self):
         data = {'name': 'Новая метка'}
@@ -54,7 +54,6 @@ class LabelCRUDTests(TestCase):
         self.assertTrue(response.context['form'].errors)
         self.assertIn('name', response.context['form'].errors)
 
-
     # READ
     def test_label_list_view_authenticated(self):
         response = self.client.get(reverse('labels:list'))
@@ -63,22 +62,19 @@ class LabelCRUDTests(TestCase):
         self.assertEqual(response.context['title'], 'Метки')
         self.assertEqual(len(response.context['labels']), 2)
 
-
     def test_label_list_view_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse('labels:list'))
-        self.assertRedirects(response, f'/login/?next={reverse("labels:list")}')
-
+        self.assertRedirects(response, f'/login/?next={reverse("labels:list")}')  # noqa: E501
 
     def test_label_list_diaplays_correct_data(self):
         response = self.client.get(reverse('labels:list'))
         self.assertContains(response, 'Метка 1')
         self.assertContains(response, 'Метка 2')
 
-
     # UPDATE
     def test_label_update_view_authenticated(self):
-        response = self.client.get(reverse("labels:update", args=[self.label1.pk]))
+        response = self.client.get(reverse("labels:update", args=[self.label1.pk]))  #noqa: E501
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/form.html')
         self.assertEqual(response.context['title'], 'Изменение метки')
@@ -86,41 +82,36 @@ class LabelCRUDTests(TestCase):
         self.assertEqual(response.context['submit_button'], 'Изменить')
         self.assertEqual(response.context['form'].instance, self.label1)
 
-
     def test_label_update_success(self):
         data = {'name': 'Обновленная метка'}
-        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data) # noqa: E501
+        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data)  # noqa: E501
 
         self.assertRedirects(response, reverse('labels:list'))
         self.label1.refresh_from_db()
         self.assertEqual(self.label1.name, 'Обновленная метка')
 
-
     def test_label_update_duplicate_name(self):
         data = {'name': 'Метка 2'}
-        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data) # noqa: E501
+        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data)  # noqa: E501
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context['form'].errors)
         self.assertIn('name', response.context['form'].errors)
 
-
     # DELETE
     def test_label_delete_authenticated(self):
-        response = self.client.get(reverse('labels:delete', args=[self.label1.pk]))
+        response = self.client.get(reverse('labels:delete', args=[self.label1.pk]))  # noqa: E501
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/delete.html')
         self.assertEqual(response.context['title'], 'Удаление метки')
         self.assertEqual(response.context['delete_title'], 'Удаление метки')
         self.assertEqual(response.context['submit_button'], 'Да, удалить')
 
-
     def test_label_delete_succes(self):
-        response = self.client.post(reverse('labels:delete', args=[self.label1.pk]))
+        response = self.client.post(reverse('labels:delete', args=[self.label1.pk]))  # noqa: E501
 
         self.assertRedirects(response, reverse('labels:list'))
         self.assertFalse(Label.objects.filter(pk=self.label1.pk).exists())
-
 
     def test_label_delete_protected_by_task(self):
         status = Status.objects.create(name='Тестовый статус')
@@ -132,7 +123,7 @@ class LabelCRUDTests(TestCase):
         )
 
         task.labels.add(self.label1)
-        response = self.client.post(reverse('labels:delete', args=[self.label1.pk]))
+        response = self.client.post(reverse('labels:delete', args=[self.label1.pk]))  # noqa: E501
 
         self.assertRedirects(response, reverse('labels:list'))
         self.assertTrue(Label.objects.filter(pk=self.label1.pk).exists())
