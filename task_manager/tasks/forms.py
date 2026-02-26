@@ -20,6 +20,7 @@ class TaskForm(forms.ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['executor'].required = False
         self.fields['status'].queryset = Status.objects.all()
         self.fields['executor'].queryset = User.objects.all()
         self.fields['labels'].queryset = Label.objects.all()
