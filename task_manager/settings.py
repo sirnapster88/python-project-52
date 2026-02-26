@@ -150,12 +150,3 @@ ROLLBAR = {
     'code_version': '1.0',
     'root': BASE_DIR,
 }
-
-from django.contrib.messages import constants as messages
-
-MESSAGE_TAGS = {
-    messages.INFO: 'info',
-    messages.SUCCESS: 'success',
-    messages.WARNING: 'warning',
-    messages.ERROR: 'danger',
-}
