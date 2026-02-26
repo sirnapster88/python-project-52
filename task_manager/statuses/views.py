@@ -83,7 +83,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             messages.success(request,gettext('Статус успешно удален'))
             return response
         except ProtectedError:
-            messages.error(request, gettext('Невозможно удалить статус, потому что он используется')) # noqa: E501
+            messages.error(request, gettext('Невозможно удалить статус, потому что он используется'))  # noqa: E501
             return redirect('statuses:list')
 
 

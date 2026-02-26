@@ -19,23 +19,9 @@ dependencies = [
 
 
 [tool.ruff]
-line-length = 88
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "C",   # flake8-comprehensions
-    "B",   # flake8-bugbear
-    "UP",  # pyupgrade
-    "YTT", # flake8-2020
-    "N",
-]
+line-length = 100
+exclude = ["migrations", "venv", ".venv", "__pycache__"]
 
 [tool.ruff.lint]
-ignore = [
-    "E501",  # line too long - handled by black
-]
-
-[tool.ruff.format]
-quote-style = "double"
+select = ["E", "W", "F", "I", "N"]
+ignore = ["E501"]

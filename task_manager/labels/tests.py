@@ -32,12 +32,10 @@ class LabelCRUDTests(TestCase):
         self.assertEqual(response.context['form_title'], 'Создать метку')
         self.assertEqual(response.context['submit_button'], 'Создать')
 
-
     def test_label_create_view_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse('labels:create'))
-        self.assertRedirects(response, f'/login/?next={reverse("labels:create")}')
-
+        self.assertRedirects(response, f'/login/?next={reverse("labels:create")}') # noqa: E501
 
     def test_create_label_success(self):
         data = {'name': 'Новая метка'}
