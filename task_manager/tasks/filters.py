@@ -81,9 +81,3 @@ class TaskFilter(django_filters.FilterSet):
         if value:
             return queryset.filter(author=self.request.user)
         return queryset
-    
-
-    def filter_my_task(self, queryset, name, value):
-        if value:
-            return queryset.filter(author=self.request.user)
-        return queryset

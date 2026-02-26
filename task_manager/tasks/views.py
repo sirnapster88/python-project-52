@@ -3,6 +3,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.translation import gettext_lazy
 from django_filters.views import FilterView
 
@@ -42,7 +43,7 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'task'
 
 
-class TaskCreateView(LoginRequiredMixin, CreateView):
+class TaskCreateView(LoginRequiredMixin, CreateView, SuccessMessageMixin):
     model = Task
     form_class = TaskForm
     template_name = 'base/form.html'
@@ -52,12 +53,10 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         'form_title': 'Создать задачу',
         'submit_button': 'Создать'       
     }
-
-
+    success_message = gettext_lazy('Задача успешно создана')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        messages.success(self.request, gettext_lazy('Задача успешно создана'))
         return super().form_valid(form)
     
 
