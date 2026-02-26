@@ -18,12 +18,4 @@ class TaskForm(forms.ModelForm):
             'executor': gettext_lazy('Исполнитель'),
             'labels':gettext_lazy('Метки')
         }
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['executor'].required = False
-        self.fields['status'].queryset = Status.objects.all()
-        self.fields['executor'].queryset = User.objects.all()
-        self.fields['labels'].queryset = Label.objects.all()
-        self.fields['executor'].label_from_instance = self._user_label
-        self.fields['executor'].empty_label = '---------'
-        self.fields['status'].empty_label = '---------'
+    
