@@ -31,7 +31,8 @@ class UserCRUDTests(TestCase):
             'password2': 'testpass123'
         }
 
-    #CREATE
+
+    # CREATE
     def test_uses_correct_template(self):
         response = self.client.get(reverse('users:create'))
         self.assertEqual(response.status_code, 200)
@@ -51,7 +52,7 @@ class UserCRUDTests(TestCase):
         self.assertEqual(len(messages), 1)
 
 
-    #READ
+    # READ
     def test_user_list_view(self):
         response = self.client.get(reverse('users:list'))
         self.assertEqual(response.status_code, 200)
@@ -70,8 +71,7 @@ class UserCRUDTests(TestCase):
         self.assertContains(response, 'testuser')
 
 
-
-    #UPDATE
+    # UPDATE
     def test_user_update_view_requiers_login(self):
         response = self.client.get(reverse('users:update', args=[self.test_user.id]))
         self.assertEqual(response.status_code, 302)
@@ -95,7 +95,7 @@ class UserCRUDTests(TestCase):
         self.assertEqual(len(messages), 1)
 
 
-    #DELETE
+    # DELETE
     def test_user_delete_view_requiers_login(self):
         response = self.client.get(reverse('users:delete', args=[self.test_user.id]))
         self.assertEqual(response.status_code, 302)
@@ -121,7 +121,4 @@ class UserCRUDTests(TestCase):
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-
-
-
 # Create your tests here.

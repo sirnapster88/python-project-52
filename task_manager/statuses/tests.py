@@ -25,11 +25,12 @@ class StatusCRUDViewTests(TestCase):
         self.client.login(username='testuser', password='testpass123')
 
 
-    #CREATE
+    # CREATE
     def test_status_create_view_exist_authenticated(self):
         response = self.client.get(reverse('statuses:create'))
         self.assertEqual(response.status_code,200)
         self.assertTemplateUsed(response, 'base/form.html')
+
 
     def test_status_create_success(self):
         data = {'name': 'test status'}
@@ -41,11 +42,13 @@ class StatusCRUDViewTests(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
 
-    #READ
+
+    # READ
     def test_status_list_view_authetnicated(self):
         response = self.client.get(reverse('statuses:list'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/list.html')
+
 
     def test_status_list_view_unauthenticated(self):
         self.client.logout()
@@ -54,12 +57,13 @@ class StatusCRUDViewTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, f'/login/?next={reverse("statuses:list")}')
 
-    #UPDATE
+    # UPDATE
     def test_status_update_view_authenticated(self):
         response = self.client.get(reverse('statuses:update', args=[self.status1.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/form.html')
         self.assertEqual(response.context['object'], self.status1)
+
 
     def test_status_update_successful(self):
         data = {'name': 'updated status'}
@@ -71,12 +75,14 @@ class StatusCRUDViewTests(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
 
-    #DELETE
+
+    # DELETE
     def test_status_delete_sucessfully(self):
         response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))
 
         self.assertRedirects(response, reverse('statuses:list'))
         self.assertFalse(Status.objects.filter(pk=self.status1.pk).exists())
+
 
     def test_status_delete_protected_by_task(self):
         Task.objects.create(

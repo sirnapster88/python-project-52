@@ -14,7 +14,7 @@ test:
 	uv run python manage.py test
 
 lint:
-	uv run ruff check --fix task_manager/
+	uv run ruff check --fix
 
 migrate:
 	uv run python manage.py migrate

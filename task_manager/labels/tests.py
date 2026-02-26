@@ -23,7 +23,7 @@ class LabelCRUDTests(TestCase):
 
         self.client.login(username='testuser', password='testuser123')
 
-    #CREATE
+    # CREATE
     def test_label_create_view_authenticated(self):
         response = self.client.get(reverse('labels:create'))
         self.assertEqual(response.status_code, 200)
@@ -32,10 +32,12 @@ class LabelCRUDTests(TestCase):
         self.assertEqual(response.context['form_title'], 'Создать метку')
         self.assertEqual(response.context['submit_button'], 'Создать')
 
+
     def test_label_create_view_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse('labels:create'))
         self.assertRedirects(response, f'/login/?next={reverse("labels:create")}')
+
 
     def test_create_label_success(self):
         data = {'name': 'Новая метка'}
@@ -48,6 +50,7 @@ class LabelCRUDTests(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Метка успешно создана')
 
+
     def test_label_create_duplicate_name(self):
         data = {'name': 'Метка 1'}
         response = self.client.post(reverse('labels:create'), data)
@@ -56,13 +59,15 @@ class LabelCRUDTests(TestCase):
         self.assertTrue(response.context['form'].errors)
         self.assertIn('name', response.context['form'].errors)
 
-    #READ
+
+    # READ
     def test_label_list_view_authenticated(self):
         response = self.client.get(reverse('labels:list'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/list.html')
         self.assertEqual(response.context['title'], 'Метки')
         self.assertEqual(len(response.context['labels']), 2)
+
 
     def test_label_list_view_unauthenticated(self):
         self.client.logout()
@@ -75,7 +80,8 @@ class LabelCRUDTests(TestCase):
         self.assertContains(response, 'Метка 1')
         self.assertContains(response, 'Метка 2')
 
-    #UPDATE
+
+    # UPDATE
     def test_label_update_view_authenticated(self):
         response = self.client.get(reverse("labels:update", args=[self.label1.pk]))
         self.assertEqual(response.status_code, 200)
@@ -85,6 +91,7 @@ class LabelCRUDTests(TestCase):
         self.assertEqual(response.context['submit_button'], 'Изменить')
         self.assertEqual(response.context['form'].instance, self.label1)
 
+
     def test_label_update_success(self):
         data = {'name': 'Обновленная метка'}
         response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data) # noqa: E501
@@ -92,6 +99,7 @@ class LabelCRUDTests(TestCase):
         self.assertRedirects(response, reverse('labels:list'))
         self.label1.refresh_from_db()
         self.assertEqual(self.label1.name, 'Обновленная метка')
+
 
     def test_label_update_duplicate_name(self):
         data = {'name': 'Метка 2'}
@@ -101,7 +109,8 @@ class LabelCRUDTests(TestCase):
         self.assertTrue(response.context['form'].errors)
         self.assertIn('name', response.context['form'].errors)
 
-    #DELETE
+
+    # DELETE
     def test_label_delete_authenticated(self):
         response = self.client.get(reverse('labels:delete', args=[self.label1.pk]))
         self.assertEqual(response.status_code, 200)
@@ -110,11 +119,13 @@ class LabelCRUDTests(TestCase):
         self.assertEqual(response.context['delete_title'], 'Удаление метки')
         self.assertEqual(response.context['submit_button'], 'Да, удалить')
 
+
     def test_label_delete_succes(self):
         response = self.client.post(reverse('labels:delete', args=[self.label1.pk]))
 
         self.assertRedirects(response, reverse('labels:list'))
         self.assertFalse(Label.objects.filter(pk=self.label1.pk).exists())
+
 
     def test_label_delete_protected_by_task(self):
         status = Status.objects.create(name='Тестовый статус')
@@ -133,5 +144,4 @@ class LabelCRUDTests(TestCase):
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-
-    # Create your tests here.
+# Create your tests here.

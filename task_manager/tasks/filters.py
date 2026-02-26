@@ -40,7 +40,7 @@ class TaskFilter(django_filters.FilterSet):
         fields = ['status', 'executor', 'label', 'my_task']
 
 
-    def filter_my_task(self, queryset, name, value):
+    def filter_my_task(self, queryset, value):
         if value:
             return queryset.filter(author=self.request.user)
         return queryset
