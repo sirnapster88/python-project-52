@@ -45,6 +45,7 @@ class UserUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     }
     success_message = 'Пользователь успешно изменен'
 
+
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'base/delete.html'

@@ -145,7 +145,7 @@ class TaskCRUDTests(TestCase):
 
     # DETAIL
     def test_tasks_detail_view_authenticated(self):
-        response = self.client.get(reverse('tasks:detail_view', args=[self.task.pk])) # noqa: E501
+        response = self.client.get(reverse('tasks:detail_view', args=[self.task.pk]))  # noqa: E501
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'tasks/detail_view.html')
         self.assertEqual(response.context['task'], self.task)
@@ -196,7 +196,7 @@ class TaskCRUDTests(TestCase):
         self.client.logout()
         self.client.login(username='otheruser', password='otheruser123')
 
-        response = self.client.post(reverse('tasks:delete', args=[self.task.pk]))  #noqa: E501
+        response = self.client.post(reverse('tasks:delete', args=[self.task.pk]))  # noqa: E501
 
         self.assertRedirects(response, reverse('tasks:list'))
         self.assertTrue(Task.objects.filter(pk=self.task.pk).exists())

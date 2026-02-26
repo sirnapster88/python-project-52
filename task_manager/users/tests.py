@@ -108,7 +108,7 @@ class UserCRUDTests(TestCase):
 
         response = self.client.post(reverse('users:delete', args=[user_id]))
 
-        self.assertRedirects(response,reverse('users:list'))
+        self.assertRedirects(response, reverse('users:list'))
         self.assertFalse(User.objects.filter(id=user_id).exists())
 
         messages = list(get_messages(response.wsgi_request))
