@@ -25,7 +25,7 @@ class Task(models.Model):
         on_delete=models.SET_NULL,
         related_name='assigned_tasks',
         null=True,
-        verbose_name='Испольнитель'   
+        verbose_name='Исполнитель'   
     )
     created_at = models.DateTimeField(auto_now_add=True)
     labels = models.ManyToManyField('labels.Label',
