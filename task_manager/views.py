@@ -11,6 +11,7 @@ class IndexView(TemplateView):
     def get(self, request):
         return render(request, 'index.html')
 
+
 class MessageLoginView(SuccessMessageMixin, LoginView):
     template_name = 'registration/login.html'
     next_page = reverse_lazy('index')

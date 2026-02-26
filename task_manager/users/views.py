@@ -14,11 +14,11 @@ class UserListView(ListView):
     context_object_name = 'users'
     ordering = ['id']
     extra_context = {
-        'title':'Пользователи',
-        'table_headers': ['ID','Имя пользователя','Полное имя','Дата создания',''],
-        'list_title': 'Пользователи',
+        'title': 'Пользователи',
+        'table_headers': ['ID', 'Имя пользователя', 'Полное имя', 'Дата создания', ''],  # noqa: E501
         'row_template': 'users/table_row.html'
     }
+
 
 class UserCreateView(SuccessMessageMixin, CreateView):
     model = User
@@ -31,6 +31,7 @@ class UserCreateView(SuccessMessageMixin, CreateView):
         'submit_button': 'Зарегистрировать'
     }
     success_message = 'Пользователь успешно зарегистрирован'
+
 
 class UserUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = User
@@ -54,13 +55,13 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
         context.update({
         'title': 'Удаление пользователя',
         'delete_title': 'Удаление пользователя',
-        'delete_message': f'Вы уверены, что хотите удалить {self.object.username}?',
+        'delete_message': f'Вы уверены, что хотите удалить {self.object.username}?',  # noqa: E501
         'submit_button': 'Да, удалить'
         })
         return context
 
     def post(self, request, *args, **kwargs):
-        messages.success(request,'Пользователь успешно удален!')
+        messages.success(request, 'Пользователь успешно удален!')
         return super().delete(request, *args, **kwargs)
 
 # Create your views here.

@@ -12,7 +12,6 @@ class UserCreateForm(UserCreationForm):
                   'password2']
 
 
-
 class UserUpdateForm(UserCreationForm):
     class Meta:
         model = User

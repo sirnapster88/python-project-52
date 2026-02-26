@@ -58,7 +58,7 @@ class TaskCRUDTests(TestCase):
     def test_task_create_view_unauthenticated(self):
         self.client.logout()
         response = self.client.get(reverse('tasks:create'))
-        self.assertRedirects(response, f'/login/?next={reverse("tasks:create")}')
+        self.assertRedirects(response, f'/login/?next={reverse("tasks:create")}')  # noqa: E501
 
     def test_task_create_success(self):
         data = {
@@ -104,7 +104,7 @@ class TaskCRUDTests(TestCase):
             author=self.author
         )
 
-        response = self.client.get(reverse('tasks:list'), {'status': new_status.pk})
+        response = self.client.get(reverse('tasks:list'), {'status': new_status.pk})  # noqa: E501
         self.assertContains(response, 'Задача 2')
         self.assertNotContains(response, 'Тестовая задача')
 
@@ -116,7 +116,7 @@ class TaskCRUDTests(TestCase):
             executor=self.other_user
         )
 
-        response = self.client.get(reverse('tasks:list'), {'executor': self.other_user.pk}) # noqa: E501
+        response = self.client.get(reverse('tasks:list'), {'executor': self.other_user.pk})  # noqa: E501
         self.assertContains(response, 'Задача 2')
         self.assertNotContains(response, 'Тестовая задача')
 
@@ -128,7 +128,7 @@ class TaskCRUDTests(TestCase):
         )
         task2.labels.add(self.label2)
 
-        response = self.client.get(reverse('tasks:list'), {'label': self.label2.id})
+        response = self.client.get(reverse('tasks:list'), {'label': self.label2.id})  # noqa: E501
         self.assertContains(response, 'Задача 2')
         self.assertNotContains(response, 'Тестовая задача')
 
@@ -145,7 +145,7 @@ class TaskCRUDTests(TestCase):
 
     # DETAIL
     def test_tasks_detail_view_authenticated(self):
-        response = self.client.get(reverse('tasks:detail_view', args=[self.task.pk]))
+        response = self.client.get(reverse('tasks:detail_view', args=[self.task.pk])) # noqa: E501
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'tasks/detail_view.html')
         self.assertEqual(response.context['task'], self.task)
@@ -167,7 +167,7 @@ class TaskCRUDTests(TestCase):
             'executor': self.other_user.pk,
             'labels': [self.label2.pk]
         }
-        response = self.client.post(reverse('tasks:update', args=[self.task.pk]), data)
+        response = self.client.post(reverse('tasks:update', args=[self.task.pk]), data)  # noqa: E501
         self.assertRedirects(response, reverse('tasks:list'))
         self.task.refresh_from_db()
 
@@ -187,7 +187,7 @@ class TaskCRUDTests(TestCase):
         self.assertEqual(response.context['submit_button'], 'Да, удалить')
 
     def test_task_delete_by_author_success(self):
-        response = self.client.post(reverse('tasks:delete', args=[self.task.pk]))
+        response = self.client.post(reverse('tasks:delete', args=[self.task.pk]))  # noqa: E501
 
         self.assertRedirects(response, reverse('tasks:list'))
         self.assertFalse(Task.objects.filter(pk=self.task.pk).exists())
@@ -196,7 +196,7 @@ class TaskCRUDTests(TestCase):
         self.client.logout()
         self.client.login(username='otheruser', password='otheruser123')
 
-        response = self.client.post(reverse('tasks:delete', args=[self.task.pk]))
+        response = self.client.post(reverse('tasks:delete', args=[self.task.pk]))  #noqa: E501
 
         self.assertRedirects(response, reverse('tasks:list'))
         self.assertTrue(Task.objects.filter(pk=self.task.pk).exists())

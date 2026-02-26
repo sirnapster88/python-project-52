@@ -24,7 +24,7 @@ class TaskListView(LoginRequiredMixin, FilterView):
             'title': 'Задачи',
             'create_url': 'tasks:create',
             'create_button': 'Создать задачу',
-            'table_headers': ['ID','Имя','Статус','Автор','Исполнитель','Дата создания',''], # noqa: E501
+            'table_headers': ['ID', 'Имя', 'Статус', 'Автор', 'Исполнитель', 'Дата создания', ''],  # noqa: E501
             'list_title': 'Задачи',
             'row_template': 'tasks/table_row.html',
             'filter_form': context['filter'].form,
@@ -84,7 +84,7 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         task = self.get_object()
         if task.author != request.user:
-            messages.error(request, gettext_lazy('Задачу может удалить только ее автор')) # noqa:E501
+            messages.error(request, gettext_lazy('Задачу может удалить только ее автор'))  # noqa:E501
             return redirect('tasks:list')
         return super().dispatch(request, *args, **kwargs)
 

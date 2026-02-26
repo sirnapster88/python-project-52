@@ -74,7 +74,7 @@ class LabelCRUDTests(TestCase):
 
     # UPDATE
     def test_label_update_view_authenticated(self):
-        response = self.client.get(reverse("labels:update", args=[self.label1.pk]))  #noqa: E501
+        response = self.client.get(reverse("labels:update", args=[self.label1.pk]))  # noqa: E501
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/form.html')
         self.assertEqual(response.context['title'], 'Изменение метки')

@@ -51,7 +51,7 @@ class StatusCRUDViewTests(TestCase):
         response = self.client.get(reverse('statuses:list'))
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, f'/login/?next={reverse("statuses:list")}')
+        self.assertRedirects(response, f'/login/?next={reverse("statuses:list")}')  # noqa: E501
 
     # UPDATE
     def test_status_update_view_authenticated(self):
@@ -72,7 +72,7 @@ class StatusCRUDViewTests(TestCase):
 
     # DELETE
     def test_status_delete_sucessfully(self):
-        response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))  #noqa: E501
+        response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))  # noqa: E501
 
         self.assertRedirects(response, reverse('statuses:list'))
         self.assertFalse(Status.objects.filter(pk=self.status1.pk).exists())
@@ -84,7 +84,7 @@ class StatusCRUDViewTests(TestCase):
             author=self.test_user
         )
 
-        response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))  #noqa: E501
+        response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))  # noqa: E501
 
         self.assertRedirects(response, reverse('statuses:list'))
         self.assertTrue(Status.objects.filter(pk=self.status1.pk).exists())
