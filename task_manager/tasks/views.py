@@ -73,7 +73,7 @@ class TaskUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = 'Задача успешно изменена'
 
 
-class TaskDeleteView(LoginRequiredMixin, DeleteView):
+class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Task
     template_name = 'base/delete.html'
     success_url = reverse_lazy('tasks:list')
@@ -83,6 +83,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
         'delete_message': 'Вы уверены, что хотите удалить задачу',
         'submit_button': 'Да, удалить',
     }
+    success_message = 'Задача успешно удалена'
 
     def post(self, request, *args, **kwargs):
         task = self.get_object()
