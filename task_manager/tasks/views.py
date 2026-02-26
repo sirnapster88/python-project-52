@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -60,7 +60,7 @@ class TaskCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
     
 
-class TaskUpdateView(LoginRequiredMixin, UpdateView):
+class TaskUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     form_class = TaskForm
     template_name = 'base/form.html'
@@ -70,6 +70,7 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
         'form_title': 'Изменение задачи',
         'submit_button': 'Изменить'
     }
+    success_message = 'Задача успешно изменена'
 
 
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
