@@ -32,6 +32,14 @@
                     <div class="col">{{ task.created_at }}</div>
                 </div>
                 <div class="row p-1">
+                    <div class="col">Метки</div>
+                    {% if task.labels.all %}
+                        {% for label in task.labels.all %}
+                            <div class="col">{{ label.name }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="row p-1">
                     <div class="col">
                         <a href="{% url 'tasks:update' task.id %}" class="btn btn-sm btn-warning">
                             <i class="bi bi-pencil"></i> Изменить</a>
