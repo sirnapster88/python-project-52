@@ -53,8 +53,8 @@ class TaskCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         'form_title': 'Создать задачу',
         'submit_button': 'Создать'       
     }
-    success_message = gettext_lazy('Задача успешно создана')
-
+    success_message = 'Задача успешно создана'
+    
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)

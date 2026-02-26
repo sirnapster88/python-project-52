@@ -80,6 +80,7 @@ class TaskCRUDTests(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
 
+
     #READ
     def test_tasks_list_view_authenticated(self):
         response = self.client.get(reverse('tasks:list'))
@@ -203,3 +204,5 @@ class TaskCRUDTests(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
 # Create your tests here.
+
+
