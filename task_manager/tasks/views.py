@@ -15,19 +15,11 @@ class TaskListView(LoginRequiredMixin, FilterView):
     template_name = 'base/list.html'
     context_object_name = 'tasks'
     filterset_class = TaskFilter
-
+    
     def get_filterset_kwargs(self, *args, **kwargs):
         kwargs = super().get_filterset_kwargs(*args, **kwargs)
         kwargs['request'] = self.request
         return kwargs
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        
-        if self.request.GET.get('my_task') == 'on':
-            queryset = queryset.filter(author=self.request.user)
-            
-        return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,8 +31,7 @@ class TaskListView(LoginRequiredMixin, FilterView):
             'list_title': 'Задачи',
             'row_template': 'tasks/table_row.html',
             'filter_form': context['filter'].form,
-            'has_filter': bool(self.request.GET),
-            'my_task_checked': self.request.GET.get('my_task') == 'on',       
+            'has_filter': bool(self.request.GET),       
             })
         return context
 
@@ -61,6 +52,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         'form_title': 'Создать задачу',
         'submit_button': 'Создать'       
     }
+
 
 
     def form_valid(self, form):

@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 
 from .models import Task
-from .forms import TaskFilterForm
 from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
 
@@ -88,7 +87,11 @@ class TaskCRUDTests(TestCase):
         self.assertTemplateUsed(response, 'base/list.html')
         self.assertEqual(response.context['title'], 'Задачи')
         self.assertIn('filter_form', response.context)
-        self.assertIsInstance(response.context['filter_form'], TaskFilterForm)
+        filter_form = response.context['filter_form']
+        self.assertIn('executor', filter_form.fields)
+        self.assertEqual(filter_form.fields['executor'].label, 'Исполнитель')
+        self.assertContains(response, 'Исполнитель')
+        self.assertContains(response, 'name="executor"')
 
     def test_tasks_filter_by_status(self):
         new_status = Status.objects.create(name='Новый статус')
@@ -124,7 +127,7 @@ class TaskCRUDTests(TestCase):
         )
         task2.labels.add(self.label2)
 
-        response = self.client.get(reverse('tasks:list'), {'label': self.label2.pk})
+        response = self.client.get(reverse('tasks:list'), {'label': self.label2.id})
         self.assertContains(response, 'Задача 2')
         self.assertNotContains(response, 'Тестовая задача')
     
