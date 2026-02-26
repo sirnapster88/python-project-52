@@ -17,10 +17,10 @@ class TaskListView(LoginRequiredMixin, FilterView):
     context_object_name = 'tasks'
     filterset_class = TaskFilter
     
-    def get_filterset_kwargs(self, *args, **kwargs):
-        kwargs = super().get_filterset_kwargs(*args, **kwargs)
-        kwargs['request'] = self.request
-        return kwargs
+    # def get_filterset_kwargs(self, *args, **kwargs):
+    #     kwargs = super().get_filterset_kwargs(*args, **kwargs)
+    #     kwargs['request'] = self.request
+    #     return kwargs
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
