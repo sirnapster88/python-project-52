@@ -80,12 +80,12 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     }
     success_message = 'Задача успешно удалена'
 
-    def post(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         task = self.get_object()
         if task.author != request.user:
             messages.error(request, gettext_lazy('Задачу может удалить только ее автор'))
             return redirect('tasks:list')
-        return super().post(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
     
 
 # Create your views here.
