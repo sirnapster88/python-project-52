@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .forms import UserCreateForm, UserUpdateForm
+from django.contrib.messages.views import SuccessMessageMixin
 
 class UserListView(ListView):
     model = User
@@ -17,7 +18,7 @@ class UserListView(ListView):
         'row_template': 'users/table_row.html'
     }
 
-class UserCreateView(CreateView):
+class UserCreateView(SuccessMessageMixin, CreateView):
     model = User
     form_class = UserCreateForm
     template_name = 'base/form.html'
@@ -27,12 +28,9 @@ class UserCreateView(CreateView):
         'form_title': 'Регистрация',
         'submit_button': 'Зарегистрировать'
     } 
+    success_message = 'Пользователь успешно зарегистрирован'
 
-    def form_valid(self, form):
-        messages.success(self.request,'Пользователь успешно зарегистрирован')
-        return super().form_valid(form)
-    
-class UserUpdateView(LoginRequiredMixin, UpdateView):
+class UserUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = 'base/form.html'
@@ -42,10 +40,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         'form_title': 'Изменение пользователя',
         'submit_button': 'Изменить'
     }
-
-    def form_valid(self, form):
-        messages.success(self.request,'Пользователь успешно изменен')
-        return super().form_valid(form)
+    success_message = 'Пользователь успешно изменен'
     
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
