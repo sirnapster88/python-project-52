@@ -16,6 +16,7 @@ class MessageLoginView(SuccessMessageMixin, LoginView):
     next_page = reverse_lazy('index')
     success_message = 'Вы залогинены'
 
+
 class MessageLogoutView(LogoutView):
     def post(self, request, *args, **kwargs):
         messages.success(request, 'Вы разлогинены')

@@ -24,4 +24,3 @@ exclude = ["migrations", "venv", ".venv", "__pycache__"]
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "N"]
-ignore = ["E501"]

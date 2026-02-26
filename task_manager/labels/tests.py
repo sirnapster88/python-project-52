@@ -40,14 +40,11 @@ class LabelCRUDTests(TestCase):
     def test_create_label_success(self):
         data = {'name': 'Новая метка'}
         response = self.client.post(reverse('labels:create'), data)
-
         self.assertRedirects(response, reverse('labels:list'))
         self.assertTrue(Label.objects.filter(name='Новая метка').exists())
-
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Метка успешно создана')
-
 
     def test_label_create_duplicate_name(self):
         data = {'name': 'Метка 1'}
