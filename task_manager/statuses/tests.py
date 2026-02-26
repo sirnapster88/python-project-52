@@ -1,10 +1,11 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
+from django.test import Client, TestCase
+from django.urls import reverse
+
+from task_manager.tasks.models import Task
 
 from .models import Status
-from task_manager.tasks.models import Task
 
 
 class StatusCRUDViewTests(TestCase):
@@ -22,14 +23,14 @@ class StatusCRUDViewTests(TestCase):
         self.status2 = Status.objects.create(name='статус2')
 
         self.client.login(username='testuser', password='testpass123')
-    
-    
+
+
     #CREATE
     def test_status_create_view_exist_authenticated(self):
         response = self.client.get(reverse('statuses:create'))
         self.assertEqual(response.status_code,200)
         self.assertTemplateUsed(response, 'base/form.html')
-    
+
     def test_status_create_success(self):
         data = {'name': 'test status'}
 
@@ -39,7 +40,7 @@ class StatusCRUDViewTests(TestCase):
         self.assertTrue(Status.objects.filter(name='test status').exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-    
+
     #READ
     def test_status_list_view_authetnicated(self):
         response = self.client.get(reverse('statuses:list'))
@@ -62,7 +63,7 @@ class StatusCRUDViewTests(TestCase):
 
     def test_status_update_successful(self):
         data = {'name': 'updated status'}
-        response = self.client.post(reverse('statuses:update', args=[self.status1.pk]), data)
+        response = self.client.post(reverse('statuses:update', args=[self.status1.pk]), data) # noqa: E501
         self.assertRedirects(response, reverse('statuses:list'))
         self.status1.refresh_from_db()
 
@@ -83,12 +84,12 @@ class StatusCRUDViewTests(TestCase):
             status=self.status1,
             author=self.test_user
         )
-        
+
         response = self.client.post(reverse('statuses:delete', args=[self.status1.pk]))
-        
+
         self.assertRedirects(response, reverse('statuses:list'))
         self.assertTrue(Status.objects.filter(pk=self.status1.pk).exists())
-        
+
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
 # Create your tests here.

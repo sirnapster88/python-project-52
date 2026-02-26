@@ -1,7 +1,8 @@
 from django import forms
-from django.utils.translation import gettext_lazy
-from task_manager.tasks.models import Task
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy
+
+from task_manager.tasks.models import Task
 
 User = get_user_model()
 
@@ -16,4 +17,4 @@ class TaskForm(forms.ModelForm):
             'executor': gettext_lazy('Исполнитель'),
             'labels':gettext_lazy('Метки')
         }
-    
+

@@ -1,11 +1,13 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
+from django.test import Client, TestCase
+from django.urls import reverse
+
+from task_manager.labels.models import Label
+from task_manager.statuses.models import Status
 
 from .models import Task
-from task_manager.statuses.models import Status
-from task_manager.labels.models import Label
+
 
 class TaskCRUDTests(TestCase):
     def setUp(self):
@@ -65,7 +67,7 @@ class TaskCRUDTests(TestCase):
             'status': self.status.pk,
             'executor': self.executor.pk,
             'labels': [self.label1.pk, self.label2.pk]
-        }        
+        }
 
         response = self.client.post(reverse('tasks:create'), data)
 
@@ -107,7 +109,7 @@ class TaskCRUDTests(TestCase):
         self.assertContains(response, 'Задача 2')
         self.assertNotContains(response, 'Тестовая задача')
 
-    
+
     def test_tasks_filter_by_executor(self):
         Task.objects.create(
             name='Задача 2',
@@ -116,11 +118,11 @@ class TaskCRUDTests(TestCase):
             executor=self.other_user
         )
 
-        response = self.client.get(reverse('tasks:list'), {'executor': self.other_user.pk})
+        response = self.client.get(reverse('tasks:list'), {'executor': self.other_user.pk}) # noqa: E501
         self.assertContains(response, 'Задача 2')
         self.assertNotContains(response, 'Тестовая задача')
 
-    
+
     def test_tasks_filter_by_label(self):
         task2 = Task.objects.create(
             name='Задача 2',
@@ -132,7 +134,7 @@ class TaskCRUDTests(TestCase):
         response = self.client.get(reverse('tasks:list'), {'label': self.label2.id})
         self.assertContains(response, 'Задача 2')
         self.assertNotContains(response, 'Тестовая задача')
-    
+
     def test_tasks_filter_by_my_tasks(self):
         Task.objects.create(
             name='Задача другого пользователя',
@@ -143,7 +145,7 @@ class TaskCRUDTests(TestCase):
         response = self.client.get(reverse('tasks:list'), {'my_task': 'on'})
         self.assertContains(response, 'Тестовая задача')
         self.assertNotContains(response, 'Задача другого пользователя')
-    
+
     #DETAIL
     def test_tasks_detail_view_authenticated(self):
         response = self.client.get(reverse('tasks:detail_view', args=[self.task.pk]))
@@ -192,7 +194,7 @@ class TaskCRUDTests(TestCase):
 
         self.assertRedirects(response, reverse('tasks:list'))
         self.assertFalse(Task.objects.filter(pk=self.task.pk).exists())
-    
+
     def test_task_delete_by_non_author(self):
         self.client.logout()
         self.client.login(username='otheruser', password='otheruser123')

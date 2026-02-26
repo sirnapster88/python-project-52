@@ -1,13 +1,14 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
 from django.contrib import messages
-from django.utils.translation import gettext_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from .models import Label
-from .forms import LabelForm
 from task_manager.tasks.models import Task
+
+from .forms import LabelForm
+from .models import Label
 
 
 class LabelListView(LoginRequiredMixin, ListView):
@@ -31,7 +32,7 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
     extra_context = {
         'title': 'Создать метку',
         'form_title': 'Создать метку',
-        'submit_button': 'Создать'        
+        'submit_button': 'Создать'
     }
 
     def form_valid(self, form):
@@ -53,9 +54,9 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request,gettext_lazy('Метка успешно изменена'))
         return super().form_valid(form)
-    
+
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
-    
+
     model = Label
     form = LabelForm
     template_name = 'base/delete.html'
@@ -74,15 +75,15 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request,gettext_lazy('Метка успешно удалена'))
         return super().form_valid(form)
-    
+
     def post(self, request, *args, **kwargs):
         label = self.get_object()
         if Task.objects.filter(labels=label).exists():
-            messages.error(request, gettext_lazy('Невозможно удалить метку, она используется'))
+            messages.error(request, gettext_lazy('Невозможно удалить метку, она используется')) # noqa: E501
             return redirect('labels:list')
-            
+
         return super().post(request, *args, **kwargs)
-        
+
 
 
 # Create your views here.

@@ -18,13 +18,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Task',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), # noqa: E501
                 ('name', models.CharField(max_length=150, verbose_name='Имя')),
                 ('description', models.TextField(verbose_name='Описание')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='authored_task', to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
-                ('executor', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='assigned_tasks', to=settings.AUTH_USER_MODEL, verbose_name='Испольнитель')),
-                ('status', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='statuses.status', verbose_name='Статус')),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='authored_task', to=settings.AUTH_USER_MODEL, verbose_name='Автор')), # noqa: E501
+                ('executor', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='assigned_tasks', to=settings.AUTH_USER_MODEL, verbose_name='Испольнитель')), # noqa: E501
+                ('status', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='statuses.status', verbose_name='Статус')), # noqa: E501
             ],
         ),
     ]

@@ -1,10 +1,12 @@
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from .forms import UserCreateForm, UserUpdateForm
 from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
+from .forms import UserCreateForm, UserUpdateForm
+
 
 class UserListView(ListView):
     model = User
@@ -27,7 +29,7 @@ class UserCreateView(SuccessMessageMixin, CreateView):
         'title': 'Регистрация',
         'form_title': 'Регистрация',
         'submit_button': 'Зарегистрировать'
-    } 
+    }
     success_message = 'Пользователь успешно зарегистрирован'
 
 class UserUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
@@ -41,14 +43,14 @@ class UserUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         'submit_button': 'Изменить'
     }
     success_message = 'Пользователь успешно изменен'
-    
+
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'base/delete.html'
     success_url = reverse_lazy('users:list')
-    
+
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
+        context = super().get_context_data(**kwargs)
         context.update({
         'title': 'Удаление пользователя',
         'delete_title': 'Удаление пользователя',

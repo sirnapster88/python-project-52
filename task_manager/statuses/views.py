@@ -1,12 +1,14 @@
-from django.shortcuts import redirect
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.utils.translation import gettext
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.deletion import ProtectedError
-from .models import Status
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.translation import gettext
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
 from .forms import StatusForm
+from .models import Status
+
 
 class StatusListView(LoginRequiredMixin, ListView):
     model = Status
@@ -20,9 +22,8 @@ class StatusListView(LoginRequiredMixin, ListView):
             'list_title': 'Статусы',
             'row_template': 'statuses/table_row.html'
         }
-    
 
-    
+
 class StatusCreateView(LoginRequiredMixin, CreateView):
     model = Status
     form_class = StatusForm
@@ -40,7 +41,7 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, gettext('Статус успешно создан.'))
         return super().form_valid(form)
 
-    
+
 class StatusUpdateView(LoginRequiredMixin, UpdateView):
     model = Status
     form_class = StatusForm
@@ -53,11 +54,11 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
         'form_title': 'Изменение статуса',
         'submit_button': 'Изменить'
     }
-    
+
     def form_valid(self, form):
         messages.success(self.request, gettext('Статус успешно изменен'))
         return super().form_valid(form)
-    
+
 class StatusDeleteView(LoginRequiredMixin, DeleteView):
     model = Status
     form = StatusForm
@@ -82,8 +83,8 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             messages.success(request,gettext('Статус успешно удален'))
             return response
         except ProtectedError:
-            messages.error(request, gettext('Невозможно удалить статус, потому что он используется'))
+            messages.error(request, gettext('Невозможно удалить статус, потому что он используется')) # noqa: E501
             return redirect('statuses:list')
 
-    
+
 # Create your views here.

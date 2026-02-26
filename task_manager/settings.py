@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
-import dj_database_url
 from pathlib import Path
+
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -24,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-1@#l9(!^_94^+g%n)n!vkii)7e*&hr-o220+%ug%e__1900i*b')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-1@#l9(!^_94^+g%n)n!vkii)7e*&hr-o220+%ug%e__1900i*b') # noqa: E501
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS','webserver,localhost,127.0.0.1,python-project-52-vadx.onrender.com').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS','webserver,localhost,127.0.0.1,python-project-52-vadx.onrender.com').split(',') # noqa: E501
 
 
 # Application definition
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap5',
     'django_filters',
-    
+
     'task_manager',
     'task_manager.users',
     'task_manager.statuses',
@@ -108,18 +109,9 @@ else:
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    # },
 ]
 
 LOGIN_REDIRECT_URL = '/'

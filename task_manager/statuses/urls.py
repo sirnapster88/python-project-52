@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import StatusListView, StatusCreateView, StatusDeleteView, StatusUpdateView
+
+from .views import StatusCreateView, StatusDeleteView, StatusListView, StatusUpdateView
 
 app_name = 'statuses'
 

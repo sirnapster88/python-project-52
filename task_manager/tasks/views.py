@@ -1,33 +1,34 @@
-from django.shortcuts import redirect
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters.views import FilterView
 
-from .models import Task
-from .forms import TaskForm
 from .filters import TaskFilter
+from .forms import TaskForm
+from .models import Task
+
 
 class TaskListView(LoginRequiredMixin, FilterView):
     model = Task
     template_name = 'base/list.html'
     context_object_name = 'tasks'
     filterset_class = TaskFilter
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'title': 'Задачи',
             'create_url': 'tasks:create',
             'create_button': 'Создать задачу',
-            'table_headers': ['ID','Имя','Статус','Автор','Исполнитель','Дата создания',''],
+            'table_headers': ['ID','Имя','Статус','Автор','Исполнитель','Дата создания',''], # noqa: E501
             'list_title': 'Задачи',
             'row_template': 'tasks/table_row.html',
             'filter_form': context['filter'].form,
-            'has_filter': bool(self.request.GET),       
+            'has_filter': bool(self.request.GET),
             })
         return context
 
@@ -46,14 +47,14 @@ class TaskCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     extra_context = {
         'title': 'Создать задачу',
         'form_title': 'Создать задачу',
-        'submit_button': 'Создать'       
+        'submit_button': 'Создать'
     }
     success_message = 'Задача успешно создана'
-    
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-    
+
 
 class TaskUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = Task
@@ -83,9 +84,9 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         task = self.get_object()
         if task.author != request.user:
-            messages.error(request, gettext_lazy('Задачу может удалить только ее автор'))
+            messages.error(request, gettext_lazy('Задачу может удалить только ее автор')) # noqa:E501
             return redirect('tasks:list')
         return super().dispatch(request, *args, **kwargs)
-    
+
 
 # Create your views here.

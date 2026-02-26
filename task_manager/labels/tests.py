@@ -1,11 +1,13 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
+from django.test import Client, TestCase
+from django.urls import reverse
+
+from task_manager.statuses.models import Status
+from task_manager.tasks.models import Task
 
 from .models import Label
-from task_manager.tasks.models import Task
-from task_manager.statuses.models import Status
+
 
 class LabelCRUDTests(TestCase):
     def setUp(self):
@@ -67,7 +69,7 @@ class LabelCRUDTests(TestCase):
         response = self.client.get(reverse('labels:list'))
         self.assertRedirects(response, f'/login/?next={reverse("labels:list")}')
 
-    
+
     def test_label_list_diaplays_correct_data(self):
         response = self.client.get(reverse('labels:list'))
         self.assertContains(response, 'Метка 1')
@@ -85,7 +87,7 @@ class LabelCRUDTests(TestCase):
 
     def test_label_update_success(self):
         data = {'name': 'Обновленная метка'}
-        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data)
+        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data) # noqa: E501
 
         self.assertRedirects(response, reverse('labels:list'))
         self.label1.refresh_from_db()
@@ -93,7 +95,7 @@ class LabelCRUDTests(TestCase):
 
     def test_label_update_duplicate_name(self):
         data = {'name': 'Метка 2'}
-        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data)
+        response = self.client.post(reverse('labels:update', args=[self.label1.pk]), data) # noqa: E501
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context['form'].errors)
@@ -122,7 +124,7 @@ class LabelCRUDTests(TestCase):
             author=self.test_user,
             status=status
         )
-        
+
         task.labels.add(self.label1)
         response = self.client.post(reverse('labels:delete', args=[self.label1.pk]))
 
@@ -131,5 +133,5 @@ class LabelCRUDTests(TestCase):
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        
+
     # Create your tests here.

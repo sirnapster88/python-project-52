@@ -1,8 +1,8 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.utils.translation import gettext_lazy
-from task_manager.statuses.models import Status
 
+from task_manager.statuses.models import Status
 
 User = get_user_model()
 
@@ -26,13 +26,13 @@ class Task(models.Model):
         related_name='assigned_tasks',
         null=True,
         blank=True,
-        verbose_name='Исполнитель'   
+        verbose_name='Исполнитель'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     labels = models.ManyToManyField('labels.Label',
                                     verbose_name=gettext_lazy('Метки'),
                                     blank=True)
-    
+
     def __str__(self):
         return self.name
 # Create your models here.

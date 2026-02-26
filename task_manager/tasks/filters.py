@@ -1,8 +1,10 @@
 import django_filters
 from django import forms
-from .models import Task, Status
-from task_manager.labels.models import Label
 from django.contrib.auth import get_user_model
+
+from task_manager.labels.models import Label
+
+from .models import Status, Task
 
 User = get_user_model()
 
@@ -36,7 +38,7 @@ class TaskFilter(django_filters.FilterSet):
     class Meta:
         model = Task
         fields = ['status', 'executor', 'label', 'my_task']
-        
+
 
     def filter_my_task(self, queryset, name, value):
         if value:
