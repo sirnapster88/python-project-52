@@ -25,6 +25,7 @@ class Task(models.Model):
         on_delete=models.PROTECT,
         related_name='assigned_tasks',
         null=True,
+        blank=True,
         verbose_name='Исполнитель'   
     )
     created_at = models.DateTimeField(auto_now_add=True)
