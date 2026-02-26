@@ -21,6 +21,16 @@
             <form method="get" class="g-3">
                 
                 {% bootstrap_form filter_form %}
+                <div class="form-check mb-3">
+                <input type="checkbox" 
+                       name="my_task" 
+                       class="form-check-input" 
+                       id="id_my_task" 
+                       {% if my_task_checked %}checked{% endif %}>
+                <label class="form-check-label" for="id_my_task">
+                    Мои задачи
+                </label>
+                </div>
 
                 <div class="col-12">
                     <div class="d-flex gap-2">

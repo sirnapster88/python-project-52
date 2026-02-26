@@ -27,24 +27,24 @@ class TaskForm(forms.ModelForm):
     #     self.fields['executor'].empty_label = '---------'
     #     self.fields['status'].empty_label = '---------'
 
-class TaskFilterForm(forms.Form):
-    status = forms.ModelChoiceField(
-        queryset=Status.objects.all(),
-        required=False,
-        label="Статус"
-    )
-    executor = forms.ModelChoiceField(
-        queryset=User.objects.all(),
-        required=False,
-        label="Исполнитель"
-    )
-    label = forms.ModelChoiceField(
-        queryset=Label.objects.all(),
-        required=False,
-        label="Метка"
-    )
-    my_task = forms.BooleanField(
-        label="Только свои задачи",
-        required=False
-    )
+# class TaskFilterForm(forms.Form):
+#     status = forms.ModelChoiceField(
+#         queryset=Status.objects.all(),
+#         required=False,
+#         label="Статус"
+#     )
+#     executor = forms.ModelChoiceField(
+#         queryset=User.objects.all(),
+#         required=False,
+#         label="Исполнитель"
+#     )
+#     label = forms.ModelChoiceField(
+#         queryset=Label.objects.all(),
+#         required=False,
+#         label="Метка"
+#     )
+#     my_task = forms.BooleanField(
+#         label="Только свои задачи",
+#         required=False
+#     )
     
