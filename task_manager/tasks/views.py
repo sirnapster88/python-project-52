@@ -43,7 +43,7 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'task'
 
 
-class TaskCreateView(LoginRequiredMixin, CreateView, SuccessMessageMixin):
+class TaskCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Task
     form_class = TaskForm
     template_name = 'base/form.html'
