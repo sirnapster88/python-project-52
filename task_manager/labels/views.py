@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.translation import gettext_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models.deletion import ProtectedError
 
 from task_manager.tasks.models import Task
 
@@ -19,13 +20,13 @@ class LabelListView(LoginRequiredMixin, ListView):
         'title': 'Метки',
         'create_url': 'labels:create',
         'create_button': 'Создать метку',
-        'table_headers': ['ID', 'Имя', 'Дата создания'],
+        'table_headers': 'labels/table_headers.html',
         'list_title': 'Метки',
         'row_template': 'labels/table_row.html'
     }
 
 
-class LabelCreateView(LoginRequiredMixin, CreateView):
+class LabelCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Label
     form_class = LabelForm
     template_name = 'base/form.html'
@@ -35,13 +36,10 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
         'form_title': 'Создать метку',
         'submit_button': 'Создать'
     }
+    success_message = 'Метка успешно создана'
+    
 
-    def form_valid(self, form):
-        messages.success(self.request, gettext_lazy('Метка успешно создана'))
-        return super().form_valid(form)
-
-
-class LabelUpdateView(LoginRequiredMixin, UpdateView):
+class LabelUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = Label
     form_class = LabelForm
     template_name = 'base/form.html'
@@ -52,38 +50,29 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
         'form_title': 'Изменение метки',
         'submit_button': 'Изменить'
     }
+    success_message = 'Метка успешно изменена'
+    
 
-    def form_valid(self, form):
-        messages.success(self.request, gettext_lazy('Метка успешно изменена'))
-        return super().form_valid(form)
-
-
-class LabelDeleteView(LoginRequiredMixin, DeleteView):
+class LabelDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
 
     model = Label
     form = LabelForm
     template_name = 'base/delete.html'
     success_url = reverse_lazy('labels:list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
+    extra_context = {
             'title': 'Удаление метки',
             'delete_title': 'Удаление метки',
             'delete_message': 'Вы уверены, что хотите удалить метку?',
             'submit_button': 'Да, удалить',
-        })
-        return context
-
-    def form_valid(self, form):
-        messages.success(self.request, gettext_lazy('Метка успешно удалена'))
-        return super().form_valid(form)
+        }
 
     def post(self, request, *args, **kwargs):
-        label = self.get_object()
-        if Task.objects.filter(labels=label).exists():
-            messages.error(request, gettext_lazy('Невозможно удалить метку, она используется'))  # noqa: E501
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success(request, 'Метка успешно удалена')
+            return response
+        except ProtectedError:
+            messages.error(request, 'Невозможно удалить метку, потому что он используется')  # noqa: E501
             return redirect('labels:list')
-
-        return super().post(request, *args, **kwargs)
 # Create your views here.

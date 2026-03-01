@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.db.models.deletion import ProtectedError
+from django.shortcuts import redirect
 
-from .forms import UserCreateForm, UserUpdateForm
+from .forms import UserForm
 
 
 class UserListView(ListView):
@@ -15,14 +17,15 @@ class UserListView(ListView):
     ordering = ['id']
     extra_context = {
         'title': 'Пользователи',
-        'table_headers': ['ID', 'Имя пользователя', 'Полное имя', 'Дата создания', ''],  # noqa: E501
+        'list_title': 'Пользователи',
+        'table_headers': 'users/table_headers.html',
         'row_template': 'users/table_row.html'
     }
 
 
 class UserCreateView(SuccessMessageMixin, CreateView):
     model = User
-    form_class = UserCreateForm
+    form_class = UserForm
     template_name = 'base/form.html'
     success_url = reverse_lazy('login')
     extra_context = {
@@ -35,7 +38,7 @@ class UserCreateView(SuccessMessageMixin, CreateView):
 
 class UserUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = User
-    form_class = UserUpdateForm
+    form_class = UserForm
     template_name = 'base/form.html'
     success_url = reverse_lazy('users:list')
     extra_context = {
@@ -46,23 +49,23 @@ class UserUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_message = 'Пользователь успешно изменен'
 
 
-class UserDeleteView(LoginRequiredMixin, DeleteView):
+class UserDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'base/delete.html'
     success_url = reverse_lazy('users:list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
+    extra_context= {
         'title': 'Удаление пользователя',
         'delete_title': 'Удаление пользователя',
-        'delete_message': f'Вы уверены, что хотите удалить {self.object.username}?',  # noqa: E501
         'submit_button': 'Да, удалить'
-        })
-        return context
-
+        }
+    
     def post(self, request, *args, **kwargs):
-        messages.success(request, 'Пользователь успешно удален!')
-        return super().delete(request, *args, **kwargs)
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success(request, 'Пользователь успешно удален')
+            return response
+        except ProtectedError as e:
+            messages.error(request,'Невозможно удалить пользователя, потому что он является автором или исполнителем задач') # noqa: E501
+            return redirect('users:list')
 
 # Create your views here.

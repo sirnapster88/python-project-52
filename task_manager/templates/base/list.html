@@ -37,17 +37,20 @@
 
     <table class="table table-striped table-hover">
         <thead>
-            <tr>
-                {% for header in table_headers %}
-                    <th>{{ header }}</th>
-                {% endfor %}
-                <th></th>
-            </tr>
+                {% block table_headers %}
+                    {% include table_headers %}
+                {% endblock %}
         </thead>
         <tbody>
-            {% block table_rows %}
-                {% include row_template %}
-            {% endblock %}
+            {% for item in object_list %}
+                {% block table_rows %}
+                    {% include row_template %}
+                {% endblock %}
+             {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Пользователей нет</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

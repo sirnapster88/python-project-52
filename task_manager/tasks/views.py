@@ -24,7 +24,7 @@ class TaskListView(LoginRequiredMixin, FilterView):
             'title': 'Задачи',
             'create_url': 'tasks:create',
             'create_button': 'Создать задачу',
-            'table_headers': ['ID', 'Имя', 'Статус', 'Автор', 'Исполнитель', 'Дата создания', ''],  # noqa: E501
+            'table_headers': 'tasks/table_headers.html', 
             'list_title': 'Задачи',
             'row_template': 'tasks/table_row.html',
             'filter_form': context['filter'].form,

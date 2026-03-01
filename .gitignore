@@ -6,3 +6,4 @@ main.py
 .python-version
 *.sqlite3
 db.sqlite3
+.pytest_cache

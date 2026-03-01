@@ -3,8 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.deletion import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.translation import gettext
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
 
 from .forms import StatusForm
 from .models import Status
@@ -18,13 +18,13 @@ class StatusListView(LoginRequiredMixin, ListView):
             'title': 'Статусы',
             'create_url': 'statuses:create',
             'create_button': 'Создать статус',
-            'table_headers': ['ID', 'Имя', 'Дата создания', ''],
+            'table_headers': 'statuses/table_headers.html',
             'list_title': 'Статусы',
             'row_template': 'statuses/table_row.html'
         }
 
 
-class StatusCreateView(LoginRequiredMixin, CreateView):
+class StatusCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Status
     form_class = StatusForm
     template_name = 'base/form.html'
@@ -36,13 +36,10 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
         'form_title': 'Создать статус',
         'submit_button': 'Создать'
     }
-
-    def form_valid(self, form):
-        messages.success(self.request, gettext('Статус успешно создан.'))
-        return super().form_valid(form)
+    success_message = 'Статус успешно создан.'
 
 
-class StatusUpdateView(LoginRequiredMixin, UpdateView):
+class StatusUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = Status
     form_class = StatusForm
     template_name = 'base/form.html'
@@ -54,10 +51,7 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
         'form_title': 'Изменение статуса',
         'submit_button': 'Изменить'
     }
-
-    def form_valid(self, form):
-        messages.success(self.request, gettext('Статус успешно изменен'))
-        return super().form_valid(form)
+    success_message = 'Статус успешно изменен'
 
 
 class StatusDeleteView(LoginRequiredMixin, DeleteView):
@@ -65,26 +59,20 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     form = StatusForm
     template_name = 'base/delete.html'
     success_url = reverse_lazy('statuses:list')
-
     login_url = reverse_lazy('login')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
+    extra_context = {
             'title': 'Удаление статуса',
             'delete_title': 'Удаление статуса',
-            'delete_message': f'Вы уверены, что хотите удалить "{self.object.name}"?',  # noqa: E501
             'submit_button': 'Да, удалить',
-        })
-        return context
+        }
 
     def post(self, request, *args, **kwargs):
         try:
             response = super().post(request, *args, **kwargs)
-            messages.success(request, gettext('Статус успешно удален'))
+            messages.success(request, 'Статус успешно удален')
             return response
         except ProtectedError:
-            messages.error(request, gettext('Невозможно удалить статус, потому что он используется'))  # noqa: E501
+            messages.error(request, 'Невозможно удалить статус, потому что он используется')  # noqa: E501
             return redirect('statuses:list')
 
 

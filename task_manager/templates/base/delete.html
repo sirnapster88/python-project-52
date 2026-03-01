@@ -6,7 +6,13 @@
 
 <div class="container mt-4">
     <h4 class="mb-0">{{ delete_title }}</h4>
-       <p>{{ delete_message }}</p>
+       <p>
+        {% if delete_message %}
+            {{ delete_message }}
+        {% else %}
+            Вы уверены, что хотите удалить {{ object }}?
+        {% endif %}
+    </p>
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">
