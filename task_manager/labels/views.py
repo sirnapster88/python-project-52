@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models.deletion import ProtectedError
 
 from task_manager.tasks.models import Task
 
