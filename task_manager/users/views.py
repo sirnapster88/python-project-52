@@ -53,7 +53,7 @@ class UserDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'base/delete.html'
     success_url = reverse_lazy('users:list')
-    extra_context= {
+    extra_context = {
         'title': 'Удаление пользователя',
         'delete_title': 'Удаление пользователя',
         'submit_button': 'Да, удалить'
@@ -64,8 +64,8 @@ class UserDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
             response = super().post(request, *args, **kwargs)
             messages.success(request, 'Пользователь успешно удален')
             return response
-        except ProtectedError as e:
-            messages.error(request,'Невозможно удалить пользователя, потому что он является автором или исполнителем задач') # noqa: E501
+        except ProtectedError:
+            messages.error(request, 'Невозможно удалить пользователя, потому что он является автором или исполнителем задач')  # noqa: E501
             return redirect('users:list')
 
 # Create your views here.
