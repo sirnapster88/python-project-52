@@ -8,6 +8,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from .forms import StatusForm
 from .models import Status
+from task_manager.tasks.models import Task
 
 
 class StatusListView(LoginRequiredMixin, ListView):
@@ -67,13 +68,17 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
         }
 
     def post(self, request, *args, **kwargs):
-        try:
-            response = super().post(request, *args, **kwargs)
-            messages.success(request, 'Статус успешно удален')
-            return response
-        except ProtectedError:
-            messages.error(request, 'Невозможно удалить статус, потому что он используется')  # noqa: E501
+        status = self.get_object()
+        
+        # Проверяем, используется ли метка в задачах
+        if Task.objects.filter(status=status).exists():
+            messages.error(request, 'Невозможно удалить статус')
             return redirect('statuses:list')
+        
+        # Если не используется - удаляем
+        response = super().post(request, *args, **kwargs)
+        messages.success(request, 'Статус успешно удален')
+        return response
 
 
 # Create your views here.
