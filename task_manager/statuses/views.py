@@ -69,12 +69,10 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         status = self.get_object()
         
-        # Проверяем, используется ли метка в задачах
         if Task.objects.filter(status=status).exists():
             messages.error(request, 'Невозможно удалить статус')
             return redirect('statuses:list')
         
-        # Если не используется - удаляем
         response = super().post(request, *args, **kwargs)
         messages.success(request, 'Статус успешно удален')
         return response

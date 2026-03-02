@@ -3,7 +3,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.translation import gettext_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters.views import FilterView
 
@@ -84,7 +83,7 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         task = self.get_object()
         if task.author != request.user:
-            messages.error(request, gettext_lazy('Задачу может удалить только ее автор'))  # noqa:E501
+            messages.error(request, 'Задачу может удалить только ее автор')  # noqa:E501
             return redirect('tasks:list')
         return super().dispatch(request, *args, **kwargs)
 

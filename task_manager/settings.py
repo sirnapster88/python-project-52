@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS','webserver,localhost,127.0.0.1,python-project-52-vadx.onrender.com').split(',') # noqa: E501
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS','webserver,localhost,127.0.0.1').split(',') # noqa: E501
 
 
 # Application definition

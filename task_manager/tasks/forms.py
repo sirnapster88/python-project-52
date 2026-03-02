@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy
 
 from task_manager.tasks.models import Task
 
@@ -12,10 +11,10 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'labels']
         labels = {
-            'name': gettext_lazy('Имя'),
-            'description': gettext_lazy('Описание'),
-            'status': gettext_lazy('Статус'),
-            'executor': gettext_lazy('Исполнитель'),
-            'labels': gettext_lazy('Метки')
+            'name': 'Имя',
+            'description': 'Описание',
+            'status': 'Статус',
+            'executor': 'Исполнитель',
+            'labels': 'Метки'
         }
 
