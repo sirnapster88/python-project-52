@@ -78,10 +78,10 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
             return redirect('tasks:list')
         try:
             response = super().post(request, *args, **kwargs)
-            messages.success('Задача успешно удалена')
+            messages.success(request, 'Задача успешно удалена')
             return response
         except ProtectedError:
-            messages.error(request,'Невозможно удалить задачу')
+            messages.error(request, 'Невозможно удалить задачу')
             return redirect('tasks:list')
 
 
