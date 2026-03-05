@@ -5,7 +5,6 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters.views import FilterView
-from django.db.models import ProtectedError
 
 from .filters import TaskFilter
 from .forms import TaskForm
@@ -17,10 +16,6 @@ class TaskListView(LoginRequiredMixin, FilterView):
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
     filterset_class = TaskFilter
-    extra_context = {
-        'title': 'Задачи',
-        'list_title': 'Задачи'
-    }
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
@@ -59,7 +54,7 @@ class TaskUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_message = 'Задача успешно изменена'
 
 
-class TaskDeleteView(LoginRequiredMixin, DeleteView):
+class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     model = Task
     template_name = 'base/delete.html'
     success_url = reverse_lazy('tasks:list')
@@ -69,21 +64,14 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
         'delete_message': 'Вы уверены, что хотите удалить задачу',
         'submit_button': 'Да, удалить',
     }
+    success_message = 'Задача успешно удалена'
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        
-        if self.object.author != request.user:
-            messages.error(request, 'Задачу может удалить только ее автор')
+    def dispatch(self, request, *args, **kwargs):
+        task = self.get_object()
+        if task.author != request.user:
+            messages.error(request, 'Задачу может удалить только ее автор')  # noqa:E501
             return redirect('tasks:list')
-        
-        try:
-            response = super().post(request, *args, **kwargs)
-            messages.success(request, 'Задача успешно удалена')
-            return response
-        except ProtectedError:
-            messages.error(request, 'Невозможно удалить задачу, она используется')
-            return redirect('tasks:list')
+        return super().dispatch(request, *args, **kwargs)
 
 
 # Create your views here.
