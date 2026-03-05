@@ -63,13 +63,13 @@ class LabelDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
             'submit_button': 'Да, удалить',
         }
     
-    def post( self, request, *args, **kwargs):
+    def form_valid(self, form):
         try:
-            response = super().post(request, *args, **kwargs)
-            messages.success(request, 'Метка успешно удалена')
+            response = super().form_valid(form)
+            messages.success(self.request, 'Метка успешно удалена')
             return response
         except ProtectedError:
-            messages.error(request, 'Невозможно удалить метку')
+            messages.error(self.request, 'Невозможно удалить метку')
             return redirect('labels:list')
 
 # Create your views here.

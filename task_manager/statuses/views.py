@@ -64,13 +64,13 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             'submit_button': 'Да, удалить',
         }
 
-    def post(self, request, *args, **kwargs):
+    def form_valid(self, form):
         try:
-            response = super().post(request, *args, **kwargs)
-            messages.success(request, 'Статус успешно удален')
+            response = super().form_valid(form)
+            messages.success(self.request, 'Статус успешно удален')
             return response
         except ProtectedError:
-            messages.error(request, 'Невозможно удалить статус')
+            messages.error(self.request, 'Невозможно удалить статус')
             return redirect('statuses:list')
 
 

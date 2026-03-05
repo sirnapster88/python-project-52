@@ -70,17 +70,17 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
         'submit_button': 'Да, удалить',
     }
 
-    def post(self, request, *args, **kwargs):
+    def form_valid(self, form):
         task = self.get_object()
-        if task.author != request.user:
-            messages.error(request, 'Задачу может удалить только ее автор')  # noqa:E501
+        if task.author != self.request.user:
+            messages.error(self.request, 'Задачу может удалить только ее автор')  # noqa:E501
             return redirect('tasks:list')
         try:
-            response = super().post(request, *args, **kwargs)
-            messages.success(request, 'Задача успешно удалена')
+            response = super().form_valid(form)
+            messages.success(self.request, 'Задача успешно удалена')
             return response
         except ProtectedError:
-            messages.error(request, 'Невозможно удалить задачу')
+            messages.error(self.request, 'Невозможно удалить задачу')
             return redirect('tasks:list')
 
 
