@@ -12,15 +12,9 @@ from .forms import UserForm
 
 class UserListView(ListView):
     model = User
-    template_name = 'base/list.html'
+    template_name = 'users/list.html'
     context_object_name = 'users'
     ordering = ['id']
-    extra_context = {
-        'title': 'Пользователи',
-        'list_title': 'Пользователи',
-        'table_headers': 'users/table_headers.html',
-        'row_template': 'users/table_row.html'
-    }
 
 
 class UserCreateView(SuccessMessageMixin, CreateView):

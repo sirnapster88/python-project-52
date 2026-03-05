@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import ProtectedError
 
 from task_manager.tasks.models import Task
 
@@ -13,16 +14,8 @@ from .models import Label
 
 class LabelListView(LoginRequiredMixin, ListView):
     model = Label
-    template_name = 'base/list.html'
+    template_name = 'labels/list.html'
     context_object_name = 'labels'
-    extra_context = {
-        'title': 'Метки',
-        'create_url': 'labels:create',
-        'create_button': 'Создать метку',
-        'table_headers': 'labels/table_headers.html',
-        'list_title': 'Метки',
-        'row_template': 'labels/table_row.html'
-    }
 
 
 class LabelCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -65,15 +58,14 @@ class LabelDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
             'delete_message': 'Вы уверены, что хотите удалить метку?',
             'submit_button': 'Да, удалить',
         }
-
-    def post(self, request, *args, **kwargs):
-        label = self.get_object()
-        
-        if Task.objects.filter(labels=label).exists():
-            messages.error(request, 'Невозможно удалить метку')
+    
+    def post( self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success(request, 'Метка успешно удалена')
+            return response
+        except ProtectedError:
+            messages.error(request, 'Нельзя удалить метку')
             return redirect('labels:list')
-        
-        response = super().post(request, *args, **kwargs)
-        messages.success(request, 'Метка успешно удалена')
-        return response
+
 # Create your views here.

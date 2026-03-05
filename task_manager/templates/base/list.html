@@ -4,51 +4,28 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-
 <div class="container mt-4">
     <h1 class="mb-4">{{ list_title }}</h1>
-    {% if create_url and create_button %}
-        <a href="{% url create_url %}" class="btn btn-primary mb-3">
-            <button type="button" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> {{ create_button }}
-            </button>
-        </a>
-    {% endif %}
+    
+    {% block create_button %}{% endblock %}
 
-    {% if filter_form %}
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="get" class="g-3">
-                
-                {% bootstrap_form filter_form %}
-        
-
-                <div class="col-12">
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-funnel"></i> Применить фильтры
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    {% endif %}
+    {% block filters %}{% endblock %}
 
     <table class="table table-striped table-hover">
         <thead>
-                {% include table_headers %}
+            {% block table_headers %}{% endblock %}
         </thead>
         <tbody>
             {% for item in object_list %}
-                    {% include row_template %}
-             {% empty %}
+                {% block table_rows %}{% endblock %}
+            {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center">Пользователей нет</td>
+                    <td colspan="{{ columns_count|default:'100%' }}" class="text-center">
+                        {{ empty_message|default:"Нет записей" }}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
 {% endblock %}

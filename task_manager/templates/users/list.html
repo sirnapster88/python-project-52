@@ -1,0 +1,42 @@
+{% extends 'base/list.html' %}
+{% load django_bootstrap5 %}
+
+{% block create_button %}
+    <a href="{% url 'users:create' %}" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-circle"></i> Создать пользователя
+    </a>
+{% endblock %}
+
+{% block table_headers %}
+    <tr>
+        <th>ID</th>
+        <th>Имя пользователя</th>
+        <th>Полное имя</th>
+        <th>Дата создания</th>
+        <th></th>
+    </tr>
+{% endblock %}
+
+{% block table_rows %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td><strong>{{ item.username }}</strong></td>
+        <td>
+            {% if item.first_name or item.last_name %}
+                {{ item.first_name }} {{ item.last_name }}
+            {% else %}
+                <span class="text-muted">—</span>
+            {% endif %}
+        </td>
+        <td>{{ item.date_joined|date:"d.m.Y H:i" }}</td>
+        <td>
+            <a href="{% url 'users:update' item.id %}" class="btn btn-sm btn-warning">
+                <i class="bi bi-pencil"></i> Изменить
+            </a>
+            <a href="{% url 'users:delete' item.id %}" class="btn btn-sm btn-danger">
+                <i class="bi bi-trash"></i> Удалить
+            </a>
+        </td>
+    </tr>
+{% endblock %}
+   

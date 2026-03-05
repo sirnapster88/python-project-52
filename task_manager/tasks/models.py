@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from task_manager.statuses.models import Status
+from task_manager.labels.models import Label
 
 User = get_user_model()
 
@@ -29,10 +30,15 @@ class Task(models.Model):
         verbose_name='Исполнитель'
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    labels = models.ManyToManyField('labels.Label',
+    labels = models.ManyToManyField(Label,
                                     verbose_name='Метки',
-                                    blank=True)
+                                    blank=True,
+                                    through='TaskLabel')
 
     def __str__(self):
         return self.name
+    
+class TaskLabel(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    label = models.ForeignKey(Label, on_delete=models.PROTECT)
 # Create your models here.

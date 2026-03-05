@@ -13,23 +13,9 @@ from .models import Task
 
 class TaskListView(LoginRequiredMixin, FilterView):
     model = Task
-    template_name = 'base/list.html'
+    template_name = 'tasks/list.html'
     context_object_name = 'tasks'
     filterset_class = TaskFilter
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'title': 'Задачи',
-            'create_url': 'tasks:create',
-            'create_button': 'Создать задачу',
-            'table_headers': 'tasks/table_headers.html', 
-            'list_title': 'Задачи',
-            'row_template': 'tasks/table_row.html',
-            'filter_form': context['filter'].form,
-            'has_filter': bool(self.request.GET),
-            })
-        return context
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
@@ -80,12 +66,12 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
     }
     success_message = 'Задача успешно удалена'
 
-    def dispatch(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         task = self.get_object()
         if task.author != request.user:
             messages.error(request, 'Задачу может удалить только ее автор')  # noqa:E501
             return redirect('tasks:list')
-        return super().dispatch(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 # Create your views here.

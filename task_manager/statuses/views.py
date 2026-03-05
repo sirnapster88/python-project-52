@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import ProtectedError
 
 from .forms import StatusForm
 from .models import Status
@@ -12,16 +13,9 @@ from task_manager.tasks.models import Task
 
 class StatusListView(LoginRequiredMixin, ListView):
     model = Status
-    template_name = 'base/list.html'
+    template_name = 'statuses/list.html'
+    context_object_name = 'statuses'
     ordering = ['name']
-    extra_context = {
-            'title': 'Статусы',
-            'create_url': 'statuses:create',
-            'create_button': 'Создать статус',
-            'table_headers': 'statuses/table_headers.html',
-            'list_title': 'Статусы',
-            'row_template': 'statuses/table_row.html'
-        }
 
 
 class StatusCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -67,15 +61,13 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
         }
 
     def post(self, request, *args, **kwargs):
-        status = self.get_object()
-        
-        if Task.objects.filter(status=status).exists():
-            messages.error(request, 'Невозможно удалить статус')
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success(request, 'Статус успешно удален')
+            return response
+        except ProtectedError:
+            messages.error(request, 'Нельзя удалить статус')
             return redirect('statuses:list')
-        
-        response = super().post(request, *args, **kwargs)
-        messages.success(request, 'Статус успешно удален')
-        return response
 
 
 # Create your views here.

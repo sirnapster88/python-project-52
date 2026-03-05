@@ -1,0 +1,56 @@
+{% extends 'base/list.html' %}
+{% load django_bootstrap5 %}
+
+{% block create_button %}
+    <a href="{% url 'tasks:create' %}" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-circle"></i> Создать задачу
+    </a>
+{% endblock %}
+
+{% block filters %}
+    {% if filter %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="g-3">
+                {% bootstrap_form filter.form %}
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-funnel"></i> Применить фильтры
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block table_headers %}
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Статус</th>
+        <th>Автор</th>
+        <th>Исполнитель</th>
+        <th>Дата создания</th>
+        <th></th>
+    </tr>
+{% endblock %}
+
+{% block table_rows %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td><a href="{% url 'tasks:detail_view' item.id %}">{{ item.name }}</a></td>
+            <td>{{ item.status.name }}</td>
+            <td>{{ item.author }}</td>
+            <td>{{ item.executor|default:"—" }}</td>
+            <td>{{ item.created_at|date:"d.m.Y H:i" }}</td>
+            <td>
+                <a href="{% url 'tasks:update' item.id %}" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil"></i> Изменить
+                </a>
+                <a href="{% url 'tasks:delete' item.id %}" class="btn btn-sm btn-danger">
+                    <i class="bi bi-trash"></i> Удалить
+                </a>
+            </td>
+        </tr>
+{% endblock %}
