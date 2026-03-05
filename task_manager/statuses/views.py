@@ -16,6 +16,11 @@ class StatusListView(LoginRequiredMixin, ListView):
     template_name = 'statuses/list.html'
     context_object_name = 'statuses'
     ordering = ['name']
+    extra_context = {
+        'title': 'Статусы',
+        'list_title': 'Статусы',
+        'create_button': 'Создать статус'
+    }
 
 
 class StatusCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):

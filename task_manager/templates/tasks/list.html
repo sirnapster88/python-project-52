@@ -1,11 +1,6 @@
 {% extends 'base/list.html' %}
 {% load django_bootstrap5 %}
 
-{% block create_button %}
-    <a href="{% url 'tasks:create' %}" class="btn btn-primary mb-3">
-        <i class="bi bi-plus-circle"></i> Создать задачу
-    </a>
-{% endblock %}
 
 {% block filters %}
     {% if filter %}

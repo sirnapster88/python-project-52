@@ -15,6 +15,11 @@ class UserListView(ListView):
     template_name = 'users/list.html'
     context_object_name = 'users'
     ordering = ['id']
+    extra_context = {
+        'title': 'Пользователи',
+        'list_title': 'Пользователи',
+        'create_button': 'Создать пользователя'
+    }
 
 
 class UserCreateView(SuccessMessageMixin, CreateView):

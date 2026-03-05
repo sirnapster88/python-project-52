@@ -16,6 +16,11 @@ class TaskListView(LoginRequiredMixin, FilterView):
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
     filterset_class = TaskFilter
+    extra_context = {
+        'title': 'Задачи',
+        'list_title': 'Задачи',
+        'create_button': 'Создать задачу'
+    }
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):

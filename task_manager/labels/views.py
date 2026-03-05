@@ -16,6 +16,11 @@ class LabelListView(LoginRequiredMixin, ListView):
     model = Label
     template_name = 'labels/list.html'
     context_object_name = 'labels'
+    extra_context = {
+        'title': 'Метки',
+        'list_title': 'Метки',
+        'create_button': 'Создать метку'
+    }
 
 
 class LabelCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
