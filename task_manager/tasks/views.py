@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters.views import FilterView
+from django.db.models import ProtectedError
 
 from .filters import TaskFilter
 from .forms import TaskForm
@@ -75,7 +76,13 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
         if task.author != request.user:
             messages.error(request, 'Задачу может удалить только ее автор')  # noqa:E501
             return redirect('tasks:list')
-        return super().post(request, *args, **kwargs)
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success('Задача успешно удалена')
+            return response
+        except ProtectedError:
+            messages.error(request,'Невозможно удалить задачу')
+            return redirect('tasks:list')
 
 
 # Create your views here.
