@@ -8,7 +8,6 @@ from django.db.models import ProtectedError
 
 from .forms import StatusForm
 from .models import Status
-from task_manager.tasks.models import Task
 
 
 class StatusListView(LoginRequiredMixin, ListView):

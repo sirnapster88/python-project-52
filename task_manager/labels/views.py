@@ -6,8 +6,6 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import ProtectedError
 
-from task_manager.tasks.models import Task
-
 from .forms import LabelForm
 from .models import Label
 
