@@ -18,9 +18,7 @@ class StatusListView(LoginRequiredMixin, ListView):
     ordering = ['name']
     extra_context = {
         'title': 'Статусы',
-        'list_title': 'Статусы',
-        'create_button': 'Создать статус',
-        'create_url': 'statuses:create'
+        'list_title': 'Статусы'
     }
 
 

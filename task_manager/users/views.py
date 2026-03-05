@@ -17,9 +17,7 @@ class UserListView(ListView):
     ordering = ['id']
     extra_context = {
         'title': 'Пользователи',
-        'list_title': 'Пользователи',
-        'create_button': 'Создать пользователя',
-        'create_url': 'users:create'
+        'list_title': 'Пользователи'
     }
 
 

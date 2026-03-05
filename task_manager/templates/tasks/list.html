@@ -2,9 +2,9 @@
 {% load django_bootstrap5 %}
 
 {% block create_button %}
-    <form action="{% url create_url %}" method="get" style="display: inline;">
+    <form action="{% url 'tasks:create' %}" method="get" style="display: inline;">
         <button type="submit" class="btn btn-primary mb-3">
-            <i class="bi bi-plus-circle"></i> {{ create_button }}
+            <i class="bi bi-plus-circle"></i> Создать задачу
         </button>
     </form>
 {% endblock %}
