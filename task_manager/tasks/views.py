@@ -38,7 +38,7 @@ class TaskCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     extra_context = {
         'title': 'Создать задачу',
         'form_title': 'Создать задачу',
-        'submit_button': 'Создать задачу'
+        'submit_button': 'Создать'
     }
     success_message = 'Задача успешно создана'
 

@@ -7,9 +7,11 @@
 <div class="container mt-4">
     <h1 class="mb-4">{{ list_title }}</h1>
     
-    <a href="{% url create_url %}" class="btn btn-primary mb-3">
-        <i class="bi bi-plus-circle"></i> {{ create_button }}
-    </a>
+    <form action="{% url create_url %}" method="get" style="display: inline;">
+        <button type="submit" class="btn btn-primary mb-3">
+            <i class="bi bi-plus-circle"></i> {{ create_button }}
+        </button>
+    </form>
 
     {% block filters %}{% endblock %}
 
