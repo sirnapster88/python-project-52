@@ -69,7 +69,6 @@ class TaskDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
         'delete_message': 'Вы уверены, что хотите удалить задачу',
         'submit_button': 'Да, удалить',
     }
-    success_message = 'Задача успешно удалена'
 
     def post(self, request, *args, **kwargs):
         task = self.get_object()
