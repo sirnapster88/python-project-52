@@ -69,7 +69,7 @@ class LabelDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
             messages.success(request, 'Метка успешно удалена')
             return response
         except ProtectedError:
-            messages.error(request, 'Нельзя удалить метку')
+            messages.error(request, 'Невозможно удалить метку')
             return redirect('labels:list')
 
 # Create your views here.
