@@ -19,7 +19,8 @@ class LabelListView(LoginRequiredMixin, ListView):
     extra_context = {
         'title': 'Метки',
         'list_title': 'Метки',
-        'create_button': 'Создать метку'
+        'create_button': 'Создать метку',
+        'create_url': 'labels:create'
     }
 
 

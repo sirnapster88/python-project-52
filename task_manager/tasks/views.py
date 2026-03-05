@@ -19,7 +19,8 @@ class TaskListView(LoginRequiredMixin, FilterView):
     extra_context = {
         'title': 'Задачи',
         'list_title': 'Задачи',
-        'create_button': 'Создать задачу'
+        'create_button': 'Создать задачу',
+        'create_url': 'tasks:create'
     }
 
 

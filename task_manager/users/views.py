@@ -18,7 +18,8 @@ class UserListView(ListView):
     extra_context = {
         'title': 'Пользователи',
         'list_title': 'Пользователи',
-        'create_button': 'Создать пользователя'
+        'create_button': 'Создать пользователя',
+        'create_url': 'users:create'
     }
 
 

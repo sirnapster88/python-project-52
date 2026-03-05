@@ -19,7 +19,8 @@ class StatusListView(LoginRequiredMixin, ListView):
     extra_context = {
         'title': 'Статусы',
         'list_title': 'Статусы',
-        'create_button': 'Создать статус'
+        'create_button': 'Создать статус',
+        'create_url': 'statuses:create'
     }
 
 
