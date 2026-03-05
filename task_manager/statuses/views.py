@@ -70,7 +70,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             messages.success(request, 'Статус успешно удален')
             return response
         except ProtectedError:
-            messages.error(request, 'Нельзя удалить статус')
+            messages.error(request, 'Невозможно удалить статус')
             return redirect('statuses:list')
 
 
